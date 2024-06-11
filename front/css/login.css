@@ -1,80 +1,22 @@
-main {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+body {
     background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.search-header {
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .container {
-    display: flex;
-    flex-direction: row;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    overflow: hidden;
-    max-width: 900px;
-    width: 80%;
-    margin-top:80px;
-}
-
-.signup, .login {
-    flex: 1;
     padding: 20px;
-}
-
-.signup {
-    background-color: #f7f7f7;
 }
 
 h2 {
     margin-top: 0;
     color: #333;
-}
-
-label {
-    display: block;
-    margin-top: 10px;
-}
-
-input {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-/* Media Queries for Mobile Devices */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        margin-top:20px;
-    }
-
-    .login {
-        order: -1; /* Affiche la section de connexion au-dessus de l'inscription */
-    }
-}
-header{
-    padding-bottom: 50px;
 }
