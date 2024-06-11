@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Autocomplete with Poster</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body>
+    <div class="form-group">
+        <label for="input-movie">Movie Title</label>
+        <input type="text" class="form-control" placeholder="Movie Title" id="input-movie">
+    </div>
+    <div id="movie-poster">
+        <!-- Movie poster will be displayed here -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', e => {
+            $('#input-movie').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "https://api.themoviedb.org/3/search/movie",
+                        dataType: "json",
+                        data: {
+                            api_key: "a78671649d9627eedd795ddb4114bf73",  
+                            query: request.term
+                        },
+                        success: function (data) {
+                            response(data.results.map(movie => {
+                                return {
+                                    label: movie.title,
+                                    value: movie.title,
+                                    id: movie.id
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    const movieId = ui.item.id;
+                    fetchMoviePoster(movieId);
+                }
+            });
+        });
+
+        function fetchMoviePoster(movieId) {
+            $.ajax({
+                url: `https://api.themoviedb.org/3/movie/${movieId}`,
+                dataType: "json",
+                data: {
+                    api_key: "a78671649d9627eedd795ddb4114bf73"  
+                },
+                success: function (movie) {
+                    const posterPath = movie.poster_path;
+                    const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
+                    $('#movie-poster').html(`<img src="${posterUrl}" alt="${movie.title} Poster">`);
+                },
+                error: function() {
+                    $('#movie-poster').html(`<p>Sorry, no poster available.</p>`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
