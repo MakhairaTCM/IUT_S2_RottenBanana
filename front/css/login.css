@@ -10,12 +10,14 @@ main {
 
 .container {
     display: flex;
+    flex-direction: row;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
     max-width: 900px;
     width: 80%;
+    margin-top:80px;
 }
 
 .signup, .login {
@@ -60,4 +62,19 @@ button {
 
 button:hover {
     background-color: #45a049;
+}
+
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        margin-top:20px;
+    }
+
+    .login {
+        order: -1; /* Affiche la section de connexion au-dessus de l'inscription */
+    }
+}
+header{
+    padding-bottom: 50px;
 }
