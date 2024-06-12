@@ -1,3 +1,7 @@
-html{
+html, body{
+    background-color: #261F46;
+    color: #D94174;
+}
+.bg-main{
     background-color: #261F46;
 }

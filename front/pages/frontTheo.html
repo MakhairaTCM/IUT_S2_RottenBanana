@@ -7,22 +7,259 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="./styleFrontTheo.css">
-
+    
+    <style>
+         #movie-posters {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        #movie-posters-random {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .movie-poster-card {
+            position: relative;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            text-align: center;
+            flex: 0 0 auto;
+        }
+        .movie-poster-card img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .movie-poster-card p {
+            margin: 0;
+            font-size: 14px;
+        }
+        .movie-poster-card .vote-icons {
+            display: none;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            gap: 10px;
+        }
+        .movie-poster-card:hover .movieImg {
+            opacity: 0.3;
+        }
+        .movie-poster-card:hover .vote-icons {
+            display: flex;
+        }
+        .vote-icon {
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+        }
+    </style>
 </head>
 <body>
-    <header></header>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid ">
+              <a class="navbar-brand" href="javascript:void(0)">Logo</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse justify-content-between align-items-center" id="mynavbar">
+                <form class="d-flex ">
+                    <input type="text" class="form-control" placeholder="Search" id="input-movie">
+                </form>
+                <ul class="navbar-nav me-auto">
+                  <li class="nav-item text-center">
+                    <a class="nav-link" href="javascript:void(0)">
+                        <img src="../assets/loginicon.png" width="32" height="32">
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </header>
+
+    <main class="p-3">
+        <section>
+            
+            <div id="movie-posters" class="pb-2"></div>
+
+        </section>
+        
+        <section class="mb-5">
+            <h2>Hot movies in your area right now</h2>
+            <div id="movie-posters-random" class="pb-2">
+                <!-- Movie posters will be displayed here -->
+            </div>
+        </section>
+        <section class="mb-5">
+            <h2>Ranking</h2>
+            <div id="movie-posters-ranking" class="mb-1">
+                <!-- Movie posters will be displayed here -->
+            </div>
+        </section>
+    </main>
+
+    <footer></footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
     
+    <script>
+        document.addEventListener('DOMContentLoaded', e => {
+            fetchRandomMovies();
+        });
+
+        function fetchRandomMovies() {
+            $.ajax({
+                url: "https://api.themoviedb.org/3/movie/popular",
+                dataType: "json",
+                data: {
+                    api_key: "a78671649d9627eedd795ddb4114bf73"
+                },
+                success: function (data) {
+                    const movies = data.results;
+                    displayRandomMovies(movies);
+                },
+                error: function() {
+                    $('#movie-posters-random').html(`<p>Sorry, could not fetch movies.</p>`);
+                }
+            });
+        }
+
+        function displayRandomMovies(movies) {
+            const moviePostersContainer = $('#movie-posters-random');
+            moviePostersContainer.empty();
+
+            const shuffledMovies = movies.sort(() => 0.5 - Math.random());
+            const randomMovies = shuffledMovies.slice(0, 20);
+
+            randomMovies.forEach(movie => {
+                const posterPath = movie.poster_path;
+                const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
+                const moviePosterCard = $('<div>').addClass('movie-poster-card');
+                const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movie.title} Poster`).addClass('movieImg');
+                const movieTitle = $('<p>').text(movie.title);
+                const voteIcons = $('<div>').addClass('vote-icons')
+                    .append($('<img>').attr('src', '../assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote').click(() => handleVote(movie.id, 'upvote')))
+                    .append($('<img>').attr('src', '../assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote').click(() => handleVote(movie.id, 'downvote')));
+                moviePosterCard.append(posterImg, movieTitle, voteIcons);
+                moviePostersContainer.append(moviePosterCard);
+            });
+        }
+
+        function handleVote(movieId, voteType) {
+            alert(`${voteType}d movie with ID: ${movieId}`);
+        }
+
+        // Search
+        document.addEventListener('DOMContentLoaded', e => {
+            $('#input-movie').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "https://api.themoviedb.org/3/search/movie",
+                        dataType: "json",
+                        data: {
+                            api_key: "a78671649d9627eedd795ddb4114bf73",  
+                            query: request.term
+                        },
+                        success: function (data) {
+                            const movies = data.results.map(movie => {
+                                return {
+                                    label: movie.title,
+                                    value: movie.title,
+                                    id: movie.id
+                                };
+                            });
+                            response(movies);
+                            displayMoviePosters(movies);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    const movieId = ui.item.id;
+                    fetchMoviePoster(movieId);
+                }
+            });
+        });
+
+        function fetchMoviePoster(movieId) {
+            $.ajax({
+                url: `https://api.themoviedb.org/3/movie/${movieId}`,
+                dataType: "json",
+                data: {
+                    api_key: "a78671649d9627eedd795ddb4114bf73"  
+                },
+                success: function (movie) {
+                    const posterPath = movie.poster_path;
+                    const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
+                    $('#movie-posters').html(`<img src="${posterUrl}" alt="${movie.title} Poster">`);
+                },
+                error: function() {
+                    $('#movie-posters').html(`<p>Sorry, no poster available.</p>`);
+                }
+            });
+        }
+
+        let searchResultsAdded = false; 
+
+        function displayMoviePosters(movies) {
+            const moviePostersContainer = $('#movie-posters');
+            moviePostersContainer.empty();
+            movies.forEach(movie => {
+                $.ajax({
+                    url: `https://api.themoviedb.org/3/movie/${movie.id}`,
+                    dataType: "json",
+                    data: {
+                        api_key: "a78671649d9627eedd795ddb4114bf73"
+                    },
+                    success: function (movieDetails) {
+                        const posterPath = movieDetails.poster_path;
+                        const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
+                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
+                        const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`);
+                        const movieTitle = $('<p>').text(movieDetails.title);
+                        
+                        moviePosterCard.append(posterImg, movieTitle);
+                        moviePostersContainer.append(moviePosterCard);
+                    },
+                    error: function() {
+                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
+                        const posterImg = $('<img>').attr('src', '../assets/placeholder.jpg').attr('alt', 'No Poster Available');
+                        const errorMsg = $('<p>').text(movie.title);
+                        moviePosterCard.append(posterImg, errorMsg);
+                        moviePostersContainer.append(moviePosterCard);
+                    }
+                });
+            });
+
+        
+            if (!searchResultsAdded) {
+                const section = $('#movie-posters').parent().addClass('mb-3'); 
+                const h2 = $('<h2>').text("Search Results"); 
+                section.prepend(h2); 
+                searchResultsAdded = true; 
+            }
+        }
+
+
+        
+    </script>
 </body>
 </html>

@@ -9,9 +9,11 @@
     <style>
         #movie-posters {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 10px;
             margin-top: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
         }
         .movie-poster-card {
             border: 1px solid #ccc;
@@ -19,6 +21,7 @@
             border-radius: 4px;
             background-color: #f9f9f9;
             text-align: center;
+            flex: 0 0 auto;
         }
         .movie-poster-card img {
             max-width: 100px;
@@ -38,8 +41,7 @@
         <input type="text" class="form-control" placeholder="Movie Title" id="input-movie">
     </div>
     <div id="movie-posters">
-        
-        
+        <!-- Movie posters will be displayed here -->
     </div>
 
     <script>
@@ -83,7 +85,7 @@
                 },
                 success: function (movie) {
                     const posterPath = movie.poster_path;
-                    const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
+                    const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
                     $('#movie-posters').html(`<img src="${posterUrl}" alt="${movie.title} Poster">`);
                 },
                 error: function() {
@@ -104,7 +106,7 @@
                     },
                     success: function (movieDetails) {
                         const posterPath = movieDetails.poster_path;
-                        const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : 'no-poster-available.jpg';
+                        const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`);
                         const movieTitle = $('<p>').text(movieDetails.title);
@@ -113,8 +115,9 @@
                     },
                     error: function() {
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
-                        const errorMsg = $('<p>').text(`Sorry, no poster available for movie ID: ${movie.id}`);
-                        moviePosterCard.append(errorMsg);
+                        const posterImg = $('<img>').attr('src', '../assets/placeholder.jpg').attr('alt', 'No Poster Available');
+                        const errorMsg = $('<p>').text(movie.title);
+                        moviePosterCard.append(posterImg, errorMsg);
                         moviePostersContainer.append(moviePosterCard);
                     }
                 });
