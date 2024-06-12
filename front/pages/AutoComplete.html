@@ -6,14 +6,40 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        #movie-posters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .movie-poster-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        .movie-poster-card img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .movie-poster-card p {
+            margin: 0;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <div class="form-group">
         <label for="input-movie">Movie Title</label>
         <input type="text" class="form-control" placeholder="Movie Title" id="input-movie">
     </div>
-    <div id="movie-poster">
-        <!-- Movie poster will be displayed here -->
+    <div id="movie-posters">
+        
+        
     </div>
 
     <script>
@@ -28,13 +54,15 @@
                             query: request.term
                         },
                         success: function (data) {
-                            response(data.results.map(movie => {
+                            const movies = data.results.map(movie => {
                                 return {
                                     label: movie.title,
                                     value: movie.title,
                                     id: movie.id
                                 };
-                            }));
+                            });
+                            response(movies);
+                            displayMoviePosters(movies);
                         }
                     });
                 },
@@ -56,11 +84,40 @@
                 success: function (movie) {
                     const posterPath = movie.poster_path;
                     const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
-                    $('#movie-poster').html(`<img src="${posterUrl}" alt="${movie.title} Poster">`);
+                    $('#movie-posters').html(`<img src="${posterUrl}" alt="${movie.title} Poster">`);
                 },
                 error: function() {
-                    $('#movie-poster').html(`<p>Sorry, no poster available.</p>`);
+                    $('#movie-posters').html(`<p>Sorry, no poster available.</p>`);
                 }
+            });
+        }
+
+        function displayMoviePosters(movies) {
+            const moviePostersContainer = $('#movie-posters');
+            moviePostersContainer.empty();
+            movies.forEach(movie => {
+                $.ajax({
+                    url: `https://api.themoviedb.org/3/movie/${movie.id}`,
+                    dataType: "json",
+                    data: {
+                        api_key: "a78671649d9627eedd795ddb4114bf73"
+                    },
+                    success: function (movieDetails) {
+                        const posterPath = movieDetails.poster_path;
+                        const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : 'no-poster-available.jpg';
+                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
+                        const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`);
+                        const movieTitle = $('<p>').text(movieDetails.title);
+                        moviePosterCard.append(posterImg, movieTitle);
+                        moviePostersContainer.append(moviePosterCard);
+                    },
+                    error: function() {
+                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
+                        const errorMsg = $('<p>').text(`Sorry, no poster available for movie ID: ${movie.id}`);
+                        moviePosterCard.append(errorMsg);
+                        moviePostersContainer.append(moviePosterCard);
+                    }
+                });
             });
         }
     </script>
