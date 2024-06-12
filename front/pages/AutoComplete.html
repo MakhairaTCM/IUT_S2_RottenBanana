@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Movie Autocomplete with Poster</title>
+    <title>Movie Search with Poster</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -39,43 +39,43 @@
     <div class="form-group">
         <label for="input-movie">Movie Title</label>
         <input type="text" class="form-control" placeholder="Movie Title" id="input-movie">
+        <!-- <button id="search-button">Search</button> -->
     </div>
     <div id="movie-posters">
         <!-- Movie posters will be displayed here -->
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', e => {
-            $('#input-movie').autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "https://api.themoviedb.org/3/search/movie",
-                        dataType: "json",
-                        data: {
-                            api_key: "a78671649d9627eedd795ddb4114bf73",  
-                            query: request.term
-                        },
-                        success: function (data) {
-                            const movies = data.results.map(movie => {
-                                return {
-                                    label: movie.title,
-                                    value: movie.title,
-                                    id: movie.id
-                                };
-                            });
-                            response(movies);
-                            displayMoviePosters(movies);
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function (event, ui) {
-                    const movieId = ui.item.id;
-                    fetchMoviePoster(movieId);
+        document.addEventListener('DOMContentLoaded', () => {
+            $('#input-movie').on('input', function () {
+                const query = $(this).val();
+                if (query.length >= 2) {
+                    searchMovies(query);
                 }
             });
         });
-
+    
+        function searchMovies(query) {
+            $.ajax({
+                url: "https://api.themoviedb.org/3/search/movie",
+                dataType: "json",
+                data: {
+                    api_key: "a78671649d9627eedd795ddb4114bf73",  
+                    query: query
+                },
+                success: function (data) {
+                    const movies = data.results.map(movie => ({
+                        id: movie.id,
+                        title: movie.title
+                    }));
+                    displayMoviePosters(movies);
+                },
+                error: function() {
+                    $('#movie-posters').html(`<p>Sorry, no movies found.</p>`);
+                }
+            });
+        }
+    
         function fetchMoviePoster(movieId) {
             $.ajax({
                 url: `https://api.themoviedb.org/3/movie/${movieId}`,
@@ -93,7 +93,7 @@
                 }
             });
         }
-
+    
         function displayMoviePosters(movies) {
             const moviePostersContainer = $('#movie-posters');
             moviePostersContainer.empty();
@@ -124,5 +124,6 @@
             });
         }
     </script>
+    
 </body>
 </html>

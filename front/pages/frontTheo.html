@@ -21,9 +21,9 @@
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse justify-content-between align-items-center" id="mynavbar">
-                <form class="d-flex ">
+                <div class="d-flex ">
                     <input type="text" class="form-control" placeholder="Search" id="input-movie">
-                </form>
+                </div>
                 <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
                     <a class="nav-link" href="./login.html">
@@ -111,37 +111,36 @@
         }
 
         // Search
-        document.addEventListener('DOMContentLoaded', e => {
-            $('#input-movie').autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "https://api.themoviedb.org/3/search/movie",
-                        dataType: "json",
-                        data: {
-                            api_key: "a78671649d9627eedd795ddb4114bf73",  
-                            query: request.term
-                        },
-                        success: function (data) {
-                            const movies = data.results.map(movie => {
-                                return {
-                                    label: movie.title,
-                                    value: movie.title,
-                                    id: movie.id
-                                };
-                            });
-                            response(movies);
-                            displayMoviePosters(movies);
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function (event, ui) {
-                    const movieId = ui.item.id;
-                    fetchMoviePoster(movieId);
+        document.addEventListener('DOMContentLoaded', () => {
+            $('#input-movie').on('input', function () {
+                const query = $(this).val();
+                if (query.length >= 2) {
+                    searchMovies(query);
                 }
             });
         });
-
+    
+        function searchMovies(query) {
+            $.ajax({
+                url: "https://api.themoviedb.org/3/search/movie",
+                dataType: "json",
+                data: {
+                    api_key: "a78671649d9627eedd795ddb4114bf73",  
+                    query: query
+                },
+                success: function (data) {
+                    const movies = data.results.map(movie => ({
+                        id: movie.id,
+                        title: movie.title
+                    }));
+                    displayMoviePosters(movies);
+                },
+                error: function() {
+                    $('#movie-posters').html(`<p>Sorry, no movies found.</p>`);
+                }
+            });
+        }
+    
         function fetchMoviePoster(movieId) {
             $.ajax({
                 url: `https://api.themoviedb.org/3/movie/${movieId}`,
@@ -159,9 +158,7 @@
                 }
             });
         }
-
-        let searchResultsAdded = false; 
-
+    
         function displayMoviePosters(movies) {
             const moviePostersContainer = $('#movie-posters');
             moviePostersContainer.empty();
@@ -178,7 +175,6 @@
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`);
                         const movieTitle = $('<p>').text(movieDetails.title);
-                        
                         moviePosterCard.append(posterImg, movieTitle);
                         moviePostersContainer.append(moviePosterCard);
                     },
@@ -191,8 +187,6 @@
                     }
                 });
             });
-
-        
             if (!searchResultsAdded) {
                 const section = $('#movie-posters').parent().addClass('mb-3'); 
                 const h2 = $('<h2>').text("Search Results"); 
@@ -200,6 +194,10 @@
                 searchResultsAdded = true; 
             }
         }
+
+        
+            
+        
 
 
         
