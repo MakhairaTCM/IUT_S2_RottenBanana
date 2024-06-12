@@ -20,10 +20,15 @@
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
                 <span class="navbar-toggler-icon"></span>
               </button>
+              
               <div class="collapse navbar-collapse justify-content-between align-items-center" id="mynavbar">
                 <div class="d-flex ">
-                    <input type="text" class="form-control" placeholder="Search" id="input-movie">
+                    <input type="text" class="form-control mt-auto mb-auto" placeholder="Search" id="input-movie">
+                    <a class="ml-3 nav-link text-center border rounded border-dark" href="./adminList.html">
+                        Admin
+                    </a>
                 </div>
+                
                 <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
                     <a class="nav-link" href="./login.html">
@@ -67,7 +72,7 @@
         document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
         });
-
+    
         function fetchRandomMovies() {
             $.ajax({
                 url: "https://api.themoviedb.org/3/movie/popular",
@@ -77,40 +82,16 @@
                 },
                 success: function (data) {
                     const movies = data.results;
-                    displayRandomMovies(movies);
+                    const shuffledMovies = movies.sort(() => 0.5 - Math.random());
+                    const randomMovies = shuffledMovies.slice(0, 20);
+                    displayMovies(randomMovies, '#movie-posters-random');
                 },
                 error: function() {
                     $('#movie-posters-random').html(`<p>Sorry, could not fetch movies.</p>`);
                 }
             });
         }
-
-        function displayRandomMovies(movies) {
-            const moviePostersContainer = $('#movie-posters-random');
-            moviePostersContainer.empty();
-
-            const shuffledMovies = movies.sort(() => 0.5 - Math.random());
-            const randomMovies = shuffledMovies.slice(0, 20);
-
-            randomMovies.forEach(movie => {
-                const posterPath = movie.poster_path;
-                const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
-                const moviePosterCard = $('<div>').addClass('movie-poster-card');
-                const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movie.title} Poster`).addClass('movieImg');
-                const movieTitle = $('<p>').text(movie.title);
-                const voteIcons = $('<div>').addClass('vote-icons')
-                    .append($('<img>').attr('src', '../assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote').click(() => handleVote(movie.id, 'upvote')))
-                    .append($('<img>').attr('src', '../assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote').click(() => handleVote(movie.id, 'downvote')));
-                moviePosterCard.append(posterImg, movieTitle, voteIcons);
-                moviePostersContainer.append(moviePosterCard);
-            });
-        }
-
-        function handleVote(movieId, voteType) {
-            alert(`${voteType}d movie with ID: ${movieId}`);
-        }
-
-        // Search
+    
         document.addEventListener('DOMContentLoaded', () => {
             $('#input-movie').on('input', function () {
                 const query = $(this).val();
@@ -133,7 +114,7 @@
                         id: movie.id,
                         title: movie.title
                     }));
-                    displayMoviePosters(movies);
+                    displayMovies(movies, '#movie-posters');
                 },
                 error: function() {
                     $('#movie-posters').html(`<p>Sorry, no movies found.</p>`);
@@ -141,26 +122,8 @@
             });
         }
     
-        function fetchMoviePoster(movieId) {
-            $.ajax({
-                url: `https://api.themoviedb.org/3/movie/${movieId}`,
-                dataType: "json",
-                data: {
-                    api_key: "a78671649d9627eedd795ddb4114bf73"  
-                },
-                success: function (movie) {
-                    const posterPath = movie.poster_path;
-                    const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
-                    $('#movie-posters').html(`<img src="${posterUrl}" alt="${movie.title} Poster">`);
-                },
-                error: function() {
-                    $('#movie-posters').html(`<p>Sorry, no poster available.</p>`);
-                }
-            });
-        }
-    
-        function displayMoviePosters(movies) {
-            const moviePostersContainer = $('#movie-posters');
+        function displayMovies(movies, containerSelector) {
+            const moviePostersContainer = $(containerSelector);
             moviePostersContainer.empty();
             movies.forEach(movie => {
                 $.ajax({
@@ -173,10 +136,15 @@
                         const posterPath = movieDetails.poster_path;
                         const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
-                        const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`);
+                        const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
-                        moviePosterCard.append(posterImg, movieTitle);
+                        const voteIcons = $('<div>').addClass('vote-icons')
+                            .append($('<img>').attr('src', '../assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote').click(() => handleVote(movie.id, 'upvote')))
+                            .append($('<img>').attr('src', '../assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote').click(() => handleVote(movie.id, 'downvote')));
+                        moviePosterCard.append(posterImg, movieTitle, voteIcons);
                         moviePostersContainer.append(moviePosterCard);
+                        
+
                     },
                     error: function() {
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
@@ -187,20 +155,21 @@
                     }
                 });
             });
-            if (!searchResultsAdded) {
-                const section = $('#movie-posters').parent().addClass('mb-3'); 
-                const h2 = $('<h2>').text("Search Results"); 
-                section.prepend(h2); 
-                searchResultsAdded = true; 
+    
+            if (containerSelector === '#movie-posters' && !searchResultsAdded) {
+                const section = $(containerSelector).parent().addClass('mb-3');
+                const h2 = $('<h2>').text("Search Results");
+                section.prepend(h2);
+                searchResultsAdded = true;
             }
         }
-
-        
-            
-        
-
-
-        
+    
+        // function handleVote(movieId, voteType) {
+        //     alert(`${voteType}d movie with ID: ${movieId}`);
+        // }
+    
+        let searchResultsAdded = false;
     </script>
+    
 </body>
 </html>

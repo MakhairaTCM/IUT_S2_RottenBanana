@@ -43,7 +43,7 @@ html, body{
     flex: 0 0 auto;
 }
 .movie-poster-card img {
-    max-width: 100px;
+    max-width: 150px;
     height: auto;
     display: block;
     margin: 0 auto 10px;
@@ -54,11 +54,11 @@ html, body{
 }
 .movie-poster-card .vote-icons {
     display: none;
-    position: absolute;
-    bottom: 10px;
+    /* position: absolute; */
+    /* bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    gap: 10px;
+    gap: 10px; */
 }
 .movie-poster-card:hover .movieImg {
     opacity: 0.3;

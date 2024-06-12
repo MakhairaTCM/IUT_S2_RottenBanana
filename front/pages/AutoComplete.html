@@ -46,83 +46,120 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            $('#input-movie').on('input', function () {
-                const query = $(this).val();
+        // version js vanilla
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchRandomMovies();
+        });
+
+        function fetchRandomMovies() {
+            fetch("https://api.themoviedb.org/3/movie/popular?api_key=a78671649d9627eedd795ddb4114bf73")
+                .then(response => response.json())
+                .then(data => {
+                    const movies = data.results;
+                    const shuffledMovies = movies.sort(() => 0.5 - Math.random());
+                    const randomMovies = shuffledMovies.slice(0, 20);
+                    displayMovies(randomMovies, '#movie-posters-random');
+                })
+                .catch(() => {
+                    document.getElementById('movie-posters-random').innerHTML = `<p>Sorry, could not fetch movies.</p>`;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('input-movie').addEventListener('input', function () {
+                const query = this.value;
                 if (query.length >= 2) {
                     searchMovies(query);
                 }
             });
         });
-    
+
         function searchMovies(query) {
-            $.ajax({
-                url: "https://api.themoviedb.org/3/search/movie",
-                dataType: "json",
-                data: {
-                    api_key: "a78671649d9627eedd795ddb4114bf73",  
-                    query: query
-                },
-                success: function (data) {
+            fetch(`https://api.themoviedb.org/3/search/movie?api_key=a78671649d9627eedd795ddb4114bf73&query=${query}`)
+                .then(response => response.json())
+                .then(data => {
                     const movies = data.results.map(movie => ({
                         id: movie.id,
                         title: movie.title
                     }));
-                    displayMoviePosters(movies);
-                },
-                error: function() {
-                    $('#movie-posters').html(`<p>Sorry, no movies found.</p>`);
-                }
-            });
+                    displayMovies(movies, '#movie-posters');
+                })
+                .catch(() => {
+                    document.getElementById('movie-posters').innerHTML = `<p>Sorry, no movies found.</p>`;
+                });
         }
-    
-        function fetchMoviePoster(movieId) {
-            $.ajax({
-                url: `https://api.themoviedb.org/3/movie/${movieId}`,
-                dataType: "json",
-                data: {
-                    api_key: "a78671649d9627eedd795ddb4114bf73"  
-                },
-                success: function (movie) {
-                    const posterPath = movie.poster_path;
-                    const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
-                    $('#movie-posters').html(`<img src="${posterUrl}" alt="${movie.title} Poster">`);
-                },
-                error: function() {
-                    $('#movie-posters').html(`<p>Sorry, no poster available.</p>`);
-                }
-            });
-        }
-    
-        function displayMoviePosters(movies) {
-            const moviePostersContainer = $('#movie-posters');
-            moviePostersContainer.empty();
+
+        function displayMovies(movies, containerSelector) {
+            const moviePostersContainer = document.querySelector(containerSelector);
+            moviePostersContainer.innerHTML = '';
             movies.forEach(movie => {
-                $.ajax({
-                    url: `https://api.themoviedb.org/3/movie/${movie.id}`,
-                    dataType: "json",
-                    data: {
-                        api_key: "a78671649d9627eedd795ddb4114bf73"
-                    },
-                    success: function (movieDetails) {
+                fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=a78671649d9627eedd795ddb4114bf73`)
+                    .then(response => response.json())
+                    .then(movieDetails => {
                         const posterPath = movieDetails.poster_path;
                         const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
-                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
-                        const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`);
-                        const movieTitle = $('<p>').text(movieDetails.title);
-                        moviePosterCard.append(posterImg, movieTitle);
-                        moviePostersContainer.append(moviePosterCard);
-                    },
-                    error: function() {
-                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
-                        const posterImg = $('<img>').attr('src', '../assets/placeholder.jpg').attr('alt', 'No Poster Available');
-                        const errorMsg = $('<p>').text(movie.title);
+                        const moviePosterCard = document.createElement('div');
+                        moviePosterCard.classList.add('movie-poster-card');
+                        
+                        const posterImg = document.createElement('img');
+                        posterImg.src = posterUrl;
+                        posterImg.alt = `${movieDetails.title} Poster`;
+                        posterImg.classList.add('movieImg');
+                        
+                        const movieTitle = document.createElement('p');
+                        movieTitle.textContent = movieDetails.title;
+                        
+                        const voteIcons = document.createElement('div');
+                        voteIcons.classList.add('vote-icons');
+
+                        const upvoteIcon = document.createElement('img');
+                        upvoteIcon.src = '../assets/likeblue.png';
+                        upvoteIcon.classList.add('vote-icon');
+                        upvoteIcon.alt = 'Upvote';
+                        upvoteIcon.addEventListener('click', () => handleVote(movie.id, 'upvote'));
+
+                        const downvoteIcon = document.createElement('img');
+                        downvoteIcon.src = '../assets/dislikered.png';
+                        downvoteIcon.classList.add('vote-icon');
+                        downvoteIcon.alt = 'Downvote';
+                        downvoteIcon.addEventListener('click', () => handleVote(movie.id, 'downvote'));
+
+                        voteIcons.append(upvoteIcon, downvoteIcon);
+                        moviePosterCard.append(posterImg, movieTitle, voteIcons);
+                        moviePostersContainer.appendChild(moviePosterCard);
+                    })
+                    .catch(() => {
+                        const moviePosterCard = document.createElement('div');
+                        moviePosterCard.classList.add('movie-poster-card');
+                        
+                        const posterImg = document.createElement('img');
+                        posterImg.src = '../assets/placeholder.jpg';
+                        posterImg.alt = 'No Poster Available';
+                        
+                        const errorMsg = document.createElement('p');
+                        errorMsg.textContent = movie.title;
+                        
                         moviePosterCard.append(posterImg, errorMsg);
-                        moviePostersContainer.append(moviePosterCard);
-                    }
-                });
+                        moviePostersContainer.appendChild(moviePosterCard);
+                    });
             });
+
+            if (containerSelector === '#movie-posters' && !searchResultsAdded) {
+                const section = document.querySelector(containerSelector).parentElement;
+                section.classList.add('mb-3');
+                const h2 = document.createElement('h2');
+                h2.textContent = "Search Results";
+                section.insertBefore(h2, section.firstChild);
+                searchResultsAdded = true;
+            }
         }
+
+        function handleVote(movieId, voteType) {
+            alert(`${voteType}d movie with ID: ${movieId}`);
+        }
+
+        let searchResultsAdded = false;
     </script>
     
 </body>
