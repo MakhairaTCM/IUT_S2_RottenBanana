@@ -10,7 +10,37 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="../css/styleFrontTheo.css">
+    <style>
+        #movie-posters-ranking .movie-poster-card {
+            width: 150px;
+            margin: 0 10px;
+            text-align: center;
+        }
     
+        #movie-posters-ranking .movie-poster-card img {
+            width: 100%;
+            height: auto;
+        }
+    
+        #movie-posters-ranking {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    
+        #movie-posters-ranking::-webkit-scrollbar {
+            height: 12px;
+        }
+    
+        #movie-posters-ranking::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 6px;
+        }
+    
+        #movie-posters-ranking::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -56,8 +86,28 @@
         </section>
         <section class="mb-5">
             <h2>Ranking</h2>
-            <div id="movie-posters-ranking" class="mb-1">
-                <!-- Movie posters will be displayed here -->
+            <div id="movie-posters-ranking" class="pb-2">
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
+                    <p>1ère</p>
+                </div>
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
+                    <p>2ème</p>
+                </div>
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
+                    <p>3ème</p>
+                </div>
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
+                    <p>4ème</p>
+                </div>
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
+                    <p>5ème</p>
+                </div>
+                <!-- Ajoutez plus de cartes si nécessaire -->
             </div>
         </section>
     </main>
@@ -167,9 +217,12 @@
         // function handleVote(movieId, voteType) {
         //     alert(`${voteType}d movie with ID: ${movieId}`);
         // }
+
+        
     
         let searchResultsAdded = false;
     </script>
+    
     
 </body>
 </html>
