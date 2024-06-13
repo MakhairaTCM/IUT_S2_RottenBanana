@@ -15,6 +15,45 @@ html, body {
     color: #F3EDED;
 }
 
+#movie-posters::-webkit-scrollbar {
+    height: 12px;
+}
+#movie-posters::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+#movie-posters::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+#movie-posters-ranking::-webkit-scrollbar {
+    height: 12px;
+}
+
+#movie-posters-ranking::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+#movie-posters-ranking::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#movie-posters-random::-webkit-scrollbar {
+    height: 12px;
+}
+
+#movie-posters-random::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+#movie-posters-random::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 #movie-posters {
     display: flex;
     flex-wrap: nowrap;
@@ -94,3 +133,41 @@ html, body {
     margin: 10px;
 }
 
+
+.movie-poster-card-ranking {
+    width: 150px;
+    margin: 0 10px;
+    text-align: center;
+}
+
+/* #movie-posters-ranking .movie-poster-card img {
+    width: 100%;
+    height: auto;
+} */
+
+#movie-posters-ranking {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.movie-poster-card-ranking {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    text-align: center;
+    flex: 0 0 auto;
+    transition: transform 1s;
+    height: 272px;
+    width: 172px;
+
+}
+.movie-poster-card-ranking p {
+    margin: 0;
+    font-size: 14px;
+    overflow: hidden;
+}
