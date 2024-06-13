@@ -14,6 +14,16 @@ html, body {
 .text-second {
     color: #F3EDED;
 }
+.text-third{
+    color: #D94174 !important;
+
+}
+.btnRedBody{
+    background-color: #D94174;
+    color: #261F46 !important;
+
+}
+
 
 /* Common scrollbar style for all specified elements */
 #movie-posters::-webkit-scrollbar,
@@ -190,3 +200,7 @@ html, body {
     white-space: nowrap;
     
 }
+/* 
+.ml-015{
+    margin-left: 0px;
+} */
