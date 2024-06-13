@@ -1,20 +1,19 @@
-html, body{
+html, body {
     background-color: #261F46;
     color: #D94174;
 }
-.bg-main{
+.bg-main {
     background-color: #261F46;
 }
 .bg-second {
     background-color: #F3EDED;
 }
-.bg-third{
+.bg-third {
     background-color: #D94174;
 }
-.text-second{
+.text-second {
     color: #F3EDED;
 }
-
 
 #movie-posters {
     display: flex;
@@ -41,33 +40,57 @@ html, body{
     background-color: #f9f9f9;
     text-align: center;
     flex: 0 0 auto;
+    transition: transform 1s;
+    height: 272px;
+    width: 172px;
+
 }
-.movie-poster-card img {
+.movie-poster-card:hover {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    text-align: center;
+    flex: 0 0 auto;
+    transition: transform 1s;
+    height: 320px;
+    width: 202px;
+
+}
+.movieImg{
     max-width: 150px;
     height: auto;
     display: block;
     margin: 0 auto 10px;
+    transition: transform 0.3s;
+}
+.movie-poster-card:hover img {
+    max-width: 180px;
 }
 .movie-poster-card p {
     margin: 0;
     font-size: 14px;
+    overflow: hidden;
 }
 .movie-poster-card .vote-icons {
     display: none;
-    /* position: absolute; */
-    /* bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    gap: 10px; */
 }
 .movie-poster-card:hover .movieImg {
     opacity: 0.3;
 }
 .movie-poster-card:hover .vote-icons {
     display: flex;
+    position: absolute;
+    top: 241px;
+    left: 54px;
+
 }
+
 .vote-icon {
     cursor: pointer;
     width: 25px;
     height: 25px;
+    margin: 10px;
 }
+
