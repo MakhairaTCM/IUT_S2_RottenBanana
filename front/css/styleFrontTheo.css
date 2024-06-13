@@ -54,6 +54,19 @@ html, body {
     background: #555;
 }
 
+#movie-posters-community::-webkit-scrollbar {
+    height: 12px;
+}
+
+#movie-posters-community::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+#movie-posters-community::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
 #movie-posters {
     display: flex;
     flex-wrap: nowrap;
@@ -99,7 +112,8 @@ html, body {
 }
 .movieImg{
     max-width: 150px;
-    height: auto;
+    height: 225px;
+    /* height: auto; */
     display: block;
     margin: 0 auto 10px;
     transition: transform 0.3s;
@@ -117,6 +131,7 @@ html, body {
 }
 .movie-poster-card:hover .movieImg {
     opacity: 0.3;
+    height: 270px;
 }
 .movie-poster-card:hover .vote-icons {
     display: flex;

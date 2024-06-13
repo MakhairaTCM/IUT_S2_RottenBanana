@@ -43,10 +43,9 @@
     </header>
 
     <main class="p-3">
-        <section>
-            
+        <section id="search-results-section" class="mb-5">
+            <h2>Search Results</h2>
             <div id="movie-posters" class="pb-2"></div>
-
         </section>
         
         <section class="mb-5">
@@ -61,18 +60,34 @@
                 <div class="movie-poster-card">
                     <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
                     <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
                 </div>
                 <div class="movie-poster-card">
                     <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
                     <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
                 </div>
                 <div class="movie-poster-card">
                     <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
                     <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
                 </div>
                 <div class="movie-poster-card">
                     <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
                     <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
                 </div>
             </div>
 
@@ -144,6 +159,10 @@
                 const query = $(this).val();
                 if (query.length >= 2) {
                     searchMovies(query);
+                } else {
+                    $('#movie-posters').empty(); 
+                    $('#search-results-section').hide(); 
+                    searchResultsAdded = false;  
                 }
             });
         });
@@ -190,8 +209,6 @@
                             .append($('<img>').attr('src', '../assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote').click(() => handleVote(movie.id, 'downvote')));
                         moviePosterCard.append(posterImg, movieTitle, voteIcons);
                         moviePostersContainer.append(moviePosterCard);
-                        
-
                     },
                     error: function() {
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
@@ -202,21 +219,16 @@
                     }
                 });
             });
-    
+
             if (containerSelector === '#movie-posters' && !searchResultsAdded) {
-                const section = $(containerSelector).parent().addClass('mb-3');
-                const h2 = $('<h2>').text("Search Results");
-                section.prepend(h2);
+                $('#search-results-section').show();
                 searchResultsAdded = true;
             }
         }
-    
-        // function handleVote(movieId,
-         // function handleVote(movieId, voteType) {
-        //     alert(`${voteType}d movie with ID: ${movieId}`);
-        // }
 
         let searchResultsAdded = false;
-    </script>
+        $('#search-results-section').hide(); 
+
+</script>
 </body>
 </html>
