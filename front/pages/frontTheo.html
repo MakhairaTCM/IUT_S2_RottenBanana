@@ -10,38 +10,8 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="../css/styleFrontTheo.css">
-    <style>
-        #movie-posters-ranking .movie-poster-card {
-            width: 150px;
-            margin: 0 10px;
-            text-align: center;
-        }
+
     
-        #movie-posters-ranking .movie-poster-card img {
-            width: 100%;
-            height: auto;
-        }
-    
-        #movie-posters-ranking {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-    
-        #movie-posters-ranking::-webkit-scrollbar {
-            height: 12px;
-        }
-    
-        #movie-posters-ranking::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 6px;
-        }
-    
-        #movie-posters-ranking::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -88,25 +58,29 @@
         <section class="mb-5">
             <h2>Ranking</h2>
             <div id="movie-posters-ranking" class="pb-2">
-                <div class="movie-poster-card">
-                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
-                    <p>1ère</p>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">1er</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 1</p>
                 </div>
-                <div class="movie-poster-card">
-                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
-                    <p>2ème</p>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">2ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 2</p>
                 </div>
-                <div class="movie-poster-card">
-                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
-                    <p>3ème</p>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">3ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 3</div>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">4ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 4</p>
                 </div>
-                <div class="movie-poster-card">
-                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
-                    <p>4ème</p>
-                </div>
-                <div class="movie-poster-card">
-                    <img src="../assets/placeholder.jpg" alt="Placeholder Image">
-                    <p>5ème</p>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">5ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 5</p>
                 </div>
                 <!-- Ajoutez plus de cartes si nécessaire -->
             </div>
@@ -215,15 +189,12 @@
             }
         }
     
-        // function handleVote(movieId, voteType) {
+        // function handleVote(movieId,
+         // function handleVote(movieId, voteType) {
         //     alert(`${voteType}d movie with ID: ${movieId}`);
         // }
 
-        
-    
         let searchResultsAdded = false;
     </script>
-    
-    
 </body>
 </html>
