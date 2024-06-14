@@ -2,165 +2,254 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Movie Search with Poster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotten Banana</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <style>
-        #movie-posters {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 10px;
-            margin-top: 20px;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        .movie-poster-card {
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            text-align: center;
-            flex: 0 0 auto;
-        }
-        .movie-poster-card img {
-            max-width: 100px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px;
-        }
-        .movie-poster-card p {
-            margin: 0;
-            font-size: 14px;
-        }
-    </style>
+
+    <link rel="stylesheet" href="../css/styleTest.css">
+    <link rel="icon" href="../assets/banana.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+    
 </head>
 <body>
-    <div class="form-group">
-        <label for="input-movie">Movie Title</label>
-        <input type="text" class="form-control" placeholder="Movie Title" id="input-movie">
-        <!-- <button id="search-button">Search</button> -->
-    </div>
-    <div id="movie-posters">
-        <!-- Movie posters will be displayed here -->
-    </div>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-third">
+            <div class="container-fluid ">
+              <a class="navbar-brand" href="./frontTheo.html">
+                <img src="../assets/banana.png" alt="" width="28px">
+              </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              
+              <div class="collapse navbar-collapse justify-content-between align-items-center" id="mynavbar">
+                <div class="d-flex ">
+                    <input type="text" class="form-control mt-auto mb-auto" placeholder="Search" id="input-movie">
+                    <!-- <a class="ml-3 nav-link text-center border rounded border-dark text-second" href="./adminList.html">
+                        Admin
+                    </a> -->
+                    <div class="dropdown ml-3">
+                        <button class="btn text-third  dropdown-toggle bg-main " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Admin
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="./adminList.html">List Movies</a>
+                          <a class="dropdown-item" href="./adminModifyAdd.html">Add Movies</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="navbar-nav me-auto">
+                  <li class="nav-item text-center">
+                    <a class="nav-link" href="./login.html">
+                        <img src="../assets/loginicon.png" width="32" height="32">
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </header>
 
+    <main class="p-3">
+        <section id="search-results-section" class="mb-5">
+            <h2>Search Results</h2>
+            <div id="movie-posters" class="pb-2"></div>
+        </section>
+        
+        <section class="mb-5">
+            <h2>Hot movies in your area right now</h2>
+            <div id="movie-posters-random" class="pb-2">
+                <!-- Movie posters will be displayed here -->
+            </div>
+        </section>
+        <section class="mb-5">
+            <div class="row ml-0">
+                <h2>Community</h2>
+                <a href="../pages/adminModifyAdd.html" class="btn btnRedBody ml-3 mt-auto mb-auto">
+                    <i class="fas fa-plus"></i> Add
+                </a>
+            </div>
+            <div id="movie-posters-community" class="pb-2">
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
+                </div>
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
+                </div>
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
+                </div>
+                <div class="movie-poster-card">
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 1</p>
+                    <div class="vote-icons">
+                        <img src="../assets/likeblue.png" class="vote-icon" alt="Upvote">
+                        <img src="../assets/dislikered.png" class="vote-icon" alt="Downvote">
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <section class="mb-5">
+            <h2>Ranking</h2>
+            <div id="movie-posters-ranking" class="pb-2">
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">1er</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 1</p>
+                </div>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">2ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 2</p>
+                </div>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">3ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 3</div>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">4ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 4</p>
+                </div>
+                <div class="movie-poster-card-ranking">
+                    <div class="ranking-badge">5ème</div>
+                    <img src="../assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
+                    <p>titre 5</p>
+                </div>
+                <!-- Ajoutez plus de cartes si nécessaire -->
+            </div>
+        </section>
+    </main>
+
+    <footer></footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        // version js vanilla
-
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
         });
-
+    
         function fetchRandomMovies() {
-            fetch("https://api.themoviedb.org/3/movie/popular?api_key=a78671649d9627eedd795ddb4114bf73")
-                .then(response => response.json())
-                .then(data => {
+            $.ajax({
+                url: "https://api.themoviedb.org/3/movie/popular",
+                dataType: "json",
+                data: {
+                    api_key: "a78671649d9627eedd795ddb4114bf73"
+                },
+                success: function (data) {
                     const movies = data.results;
                     const shuffledMovies = movies.sort(() => 0.5 - Math.random());
                     const randomMovies = shuffledMovies.slice(0, 20);
                     displayMovies(randomMovies, '#movie-posters-random');
-                })
-                .catch(() => {
-                    document.getElementById('movie-posters-random').innerHTML = `<p>Sorry, could not fetch movies.</p>`;
-                });
+                },
+                error: function() {
+                    $('#movie-posters-random').html(`<p>Sorry, could not fetch movies.</p>`);
+                }
+            });
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('input-movie').addEventListener('input', function () {
-                const query = this.value;
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            $('#input-movie').on('input', function () {
+                const query = $(this).val();
                 if (query.length >= 2) {
                     searchMovies(query);
+                } else {
+                    $('#movie-posters').empty(); 
+                    $('#search-results-section').hide(); 
+                    searchResultsAdded = false;  
                 }
             });
         });
-
+    
         function searchMovies(query) {
-            fetch(`https://api.themoviedb.org/3/search/movie?api_key=a78671649d9627eedd795ddb4114bf73&query=${query}`)
-                .then(response => response.json())
-                .then(data => {
+            $.ajax({
+                url: "https://api.themoviedb.org/3/search/movie",
+                dataType: "json",
+                data: {
+                    api_key: "a78671649d9627eedd795ddb4114bf73",  
+                    query: query
+                },
+                success: function (data) {
                     const movies = data.results.map(movie => ({
                         id: movie.id,
                         title: movie.title
                     }));
                     displayMovies(movies, '#movie-posters');
-                })
-                .catch(() => {
-                    document.getElementById('movie-posters').innerHTML = `<p>Sorry, no movies found.</p>`;
-                });
+                },
+                error: function() {
+                    $('#movie-posters').html(`<p>Sorry, no movies found.</p>`);
+                }
+            });
         }
-
+    
         function displayMovies(movies, containerSelector) {
-            const moviePostersContainer = document.querySelector(containerSelector);
-            moviePostersContainer.innerHTML = '';
+            const moviePostersContainer = $(containerSelector);
+            moviePostersContainer.empty();
             movies.forEach(movie => {
-                fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=a78671649d9627eedd795ddb4114bf73`)
-                    .then(response => response.json())
-                    .then(movieDetails => {
+                $.ajax({
+                    url: `https://api.themoviedb.org/3/movie/${movie.id}`,
+                    dataType: "json",
+                    data: {
+                        api_key: "a78671649d9627eedd795ddb4114bf73"
+                    },
+                    success: function (movieDetails) {
                         const posterPath = movieDetails.poster_path;
                         const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../assets/placeholder.jpg';
-                        const moviePosterCard = document.createElement('div');
-                        moviePosterCard.classList.add('movie-poster-card');
-                        
-                        const posterImg = document.createElement('img');
-                        posterImg.src = posterUrl;
-                        posterImg.alt = `${movieDetails.title} Poster`;
-                        posterImg.classList.add('movieImg');
-                        
-                        const movieTitle = document.createElement('p');
-                        movieTitle.textContent = movieDetails.title;
-                        
-                        const voteIcons = document.createElement('div');
-                        voteIcons.classList.add('vote-icons');
-
-                        const upvoteIcon = document.createElement('img');
-                        upvoteIcon.src = '../assets/likeblue.png';
-                        upvoteIcon.classList.add('vote-icon');
-                        upvoteIcon.alt = 'Upvote';
-                        upvoteIcon.addEventListener('click', () => handleVote(movie.id, 'upvote'));
-
-                        const downvoteIcon = document.createElement('img');
-                        downvoteIcon.src = '../assets/dislikered.png';
-                        downvoteIcon.classList.add('vote-icon');
-                        downvoteIcon.alt = 'Downvote';
-                        downvoteIcon.addEventListener('click', () => handleVote(movie.id, 'downvote'));
-
-                        voteIcons.append(upvoteIcon, downvoteIcon);
+                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
+                        const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
+                        const movieTitle = $('<p>').text(movieDetails.title);
+                        const voteIcons = $('<div>').addClass('vote-icons')
+                            .append($('<img>').attr('src', '../assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote').click(() => handleVote(movie.id, 'upvote')))
+                            .append($('<img>').attr('src', '../assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote').click(() => handleVote(movie.id, 'downvote')));
                         moviePosterCard.append(posterImg, movieTitle, voteIcons);
-                        moviePostersContainer.appendChild(moviePosterCard);
-                    })
-                    .catch(() => {
-                        const moviePosterCard = document.createElement('div');
-                        moviePosterCard.classList.add('movie-poster-card');
-                        
-                        const posterImg = document.createElement('img');
-                        posterImg.src = '../assets/placeholder.jpg';
-                        posterImg.alt = 'No Poster Available';
-                        
-                        const errorMsg = document.createElement('p');
-                        errorMsg.textContent = movie.title;
-                        
+                        moviePostersContainer.append(moviePosterCard);
+                    },
+                    error: function() {
+                        const moviePosterCard = $('<div>').addClass('movie-poster-card');
+                        const posterImg = $('<img>').attr('src', '../assets/placeholder.jpg').attr('alt', 'No Poster Available');
+                        const errorMsg = $('<p>').text(movie.title);
                         moviePosterCard.append(posterImg, errorMsg);
-                        moviePostersContainer.appendChild(moviePosterCard);
-                    });
+                        moviePostersContainer.append(moviePosterCard);
+                    }
+                });
             });
 
             if (containerSelector === '#movie-posters' && !searchResultsAdded) {
-                const section = document.querySelector(containerSelector).parentElement;
-                section.classList.add('mb-3');
-                const h2 = document.createElement('h2');
-                h2.textContent = "Search Results";
-                section.insertBefore(h2, section.firstChild);
+                $('#search-results-section').show();
                 searchResultsAdded = true;
             }
         }
 
-        function handleVote(movieId, voteType) {
-            alert(`${voteType}d movie with ID: ${movieId}`);
-        }
-
         let searchResultsAdded = false;
-    </script>
-    
+        $('#search-results-section').hide(); 
+
+</script>
 </body>
 </html>
