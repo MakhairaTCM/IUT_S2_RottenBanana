@@ -33,34 +33,38 @@ td{
 }
 
 
-/* Common scrollbar style for all specified elements */
 #movie-posters::-webkit-scrollbar,
 #movie-posters-ranking::-webkit-scrollbar,
 #movie-posters-random::-webkit-scrollbar,
 #movie-posters-community::-webkit-scrollbar,
-.ligneFlex::-webkit-scrollbar {
+.ligneFlex::-webkit-scrollbar,
+.rowResponsiveAdmin::-webkit-scrollbar{
     height: 12px;
 }
 
-/* Common scrollbar thumb style for all specified elements */
+
 #movie-posters::-webkit-scrollbar-thumb,
 #movie-posters-ranking::-webkit-scrollbar-thumb,
 #movie-posters-random::-webkit-scrollbar-thumb,
 #movie-posters-community::-webkit-scrollbar-thumb,
-.ligneFlex::-webkit-scrollbar-thumb {
+.ligneFlex::-webkit-scrollbar-thumb,
+.rowResponsiveAdmin::-webkit-scrollbar {
     background: #888;
     border-radius: 6px;
 }
 
-/* Common scrollbar thumb hover style for all specified elements */
+
 #movie-posters::-webkit-scrollbar-thumb:hover,
 #movie-posters-ranking::-webkit-scrollbar-thumb:hover,
 #movie-posters-random::-webkit-scrollbar-thumb:hover,
 #movie-posters-community::-webkit-scrollbar-thumb:hover,
-.ligneFlex::-webkit-scrollbar-thumb:hover {
-    background: #555;
+.ligneFlex::-webkit-scrollbar-thumb:hover,
+.rowResponsiveAdmin::-webkit-scrollbar {
+    background: #D94174;
 }
-
+.rowResponsiveAdmin::-webkit-scrollbar {
+    background: #D94174;
+}
 
 
 #movie-posters {
@@ -230,4 +234,19 @@ td{
 
 .backdropFilterBr{
     backdrop-filter: brightness(0.6);
+}
+.fixedHeightWidthCard{
+    width: 220px;
+    height: 380px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    
+
+}
+.rowResponsiveAdmin{
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    overflow-x: scroll;
+
 }
