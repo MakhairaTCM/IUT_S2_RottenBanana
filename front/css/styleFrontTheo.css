@@ -29,7 +29,8 @@ html, body {
 #movie-posters::-webkit-scrollbar,
 #movie-posters-ranking::-webkit-scrollbar,
 #movie-posters-random::-webkit-scrollbar,
-#movie-posters-community::-webkit-scrollbar {
+#movie-posters-community::-webkit-scrollbar,
+.ligneFlex::-webkit-scrollbar {
     height: 12px;
 }
 
@@ -37,7 +38,8 @@ html, body {
 #movie-posters::-webkit-scrollbar-thumb,
 #movie-posters-ranking::-webkit-scrollbar-thumb,
 #movie-posters-random::-webkit-scrollbar-thumb,
-#movie-posters-community::-webkit-scrollbar-thumb {
+#movie-posters-community::-webkit-scrollbar-thumb,
+.ligneFlex::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 6px;
 }
@@ -46,7 +48,8 @@ html, body {
 #movie-posters::-webkit-scrollbar-thumb:hover,
 #movie-posters-ranking::-webkit-scrollbar-thumb:hover,
 #movie-posters-random::-webkit-scrollbar-thumb:hover,
-#movie-posters-community::-webkit-scrollbar-thumb:hover {
+#movie-posters-community::-webkit-scrollbar-thumb:hover,
+.ligneFlex::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
@@ -140,16 +143,6 @@ html, body {
 }
 
 
-.movie-poster-card-ranking {
-    width: 150px;
-    margin: 0 10px;
-    text-align: center;
-}
-
-/* #movie-posters-ranking .movie-poster-card img {
-    width: 100%;
-    height: auto;
-} */
 
 #movie-posters-ranking {
     display: flex;
@@ -161,10 +154,10 @@ html, body {
 }
 .movie-poster-card-ranking {
     position: relative;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     padding: 10px;
-    border-radius: 4px;
-    background-color: #f9f9f9;
+    /* border-radius: 4px; */
+    /* background-color: #f9f9f9; */
     text-align: center;
     flex: 0 0 auto;
     transition: transform 1s;
@@ -181,17 +174,17 @@ html, body {
 .movie-poster-card-ranking {
     position: relative;
     display: inline-block;
-    margin: 10px;
+    /* margin: 10px; */
 }
 
 .ranking-badge {
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
+    background-color: #D94174;
+    color: #261F46;
     padding: 5px 10px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     font-weight: bold;
 }
 
@@ -217,7 +210,6 @@ html, body {
     flex-direction: row;
     flex-wrap: nowrap;
     overflow: scroll;
-    overflow: hidden;
     overflow-y: hidden;
     height: auto;
 }
