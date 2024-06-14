@@ -23,6 +23,10 @@ html, body {
     color: #261F46 !important;
 
 }
+h1{
+    color: #261F46;
+    font-size: 30px ;
+}
 
 
 /* Common scrollbar style for all specified elements */
@@ -104,7 +108,7 @@ html, body {
     height: 225px;
     /* height: auto; */
     display: block;
-    margin: 0 auto 10px;
+    /* margin: 0 auto 10px; */
     transition: transform 0.3s;
 }
 .movie-poster-card:hover img {

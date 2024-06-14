@@ -22,7 +22,10 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
               <a class="navbar-brand" href="./frontTheo.html">
-                <img src="../assets/banana.png" alt="" width="28px">
+                <img src="../assets/banana.png" alt="a rotten banana" width="28">
+              </a>
+              <a href="./frontTheo.html" class="mt-auto mb-auto text-decoration-none mr-3">
+                <h1 class="m-0">Rotten Banana</h1>
               </a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mynavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -49,7 +52,7 @@
                 <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
                     <a class="nav-link" href="./login.html">
-                        <img src="../assets/loginicon.png" width="32" height="32">
+                        <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
                     </a>
                   </li>
                 </ul>
@@ -147,7 +150,7 @@
             <h2>Results Charts</h2>
             <div class="ligneFlex pb-1">
                 <canvas id="myChart1" style="width:100%;max-width:700px" class="bg-light border rounded mb-3"></canvas>
-                <canvas id="myChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3""></canvas>
+                <canvas id="myChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3"></canvas>
             </div>
         </section>
     </main>
@@ -295,8 +298,8 @@
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
-                            .append($('<img>').attr('src', '../assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote').click(() => handleVote(movie.id, 'upvote')))
-                            .append($('<img>').attr('src', '../assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote').click(() => handleVote(movie.id, 'downvote')));
+                            .append($('<img>').attr('src', '../assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote'))
+                            .append($('<img>').attr('src', '../assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
                         moviePosterCard.append(posterImg, movieTitle, voteIcons);
                         moviePostersContainer.append(moviePosterCard);
                     },
