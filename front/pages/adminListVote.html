@@ -36,6 +36,8 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <a class="dropdown-item" href="./adminList.html">List Movies</a>
                       <a class="dropdown-item" href="./adminModifyAdd.html">Add Movies</a>
+                      <a class="dropdown-item" href="./adminListVote.html">List Vote</a>
+
                       <!-- <a class="dropdown-item" href="#">Something else here</a> -->
                     </div>
                 </div>
@@ -53,14 +55,13 @@
     </header>
 
     <main>
-        <table class="table align-middle mb-0 bg-third">
+        <table class="table align-middle mb-0 bg-third container mt-4">
             <thead class="bg-light">
               <tr>
                 <th>E-mail Adress</th>
                 <th>Movie Title</th>
-                <th>Status</th>
-                <th>Position</th>
-                <th>Actions</th>
+                <th>Vote</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -70,23 +71,20 @@
                    
                     <div class="ms-3">
                      
-                      <p class="text-muted mb-0">john.doe@gmail.com</p>
+                      <p class=" mb-0">john.doe@gmail.com</p>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <p class="fw-normal mb-1">Software engineer</p>
+                  <p class="fw-normal mb-1">title</p>
                
                 </td>
-                <td>
-                  <span class="badge badge-success rounded-pill d-inline">Active</span>
+                <td class="backdropFilterBr">
+                    <img src="../assets/likeblue.png" class="vote-icon-liste" alt="Upvote">
+
+                    
                 </td>
-                <td>Senior</td>
-                <td>
-                  <button type="button" class="btn btn-link btn-sm btn-rounded">
-                    Edit
-                  </button>
-                </td>
+               
               </tr>
               <tr>
                 <td>
@@ -94,29 +92,20 @@
                     
                     <div class="ms-3">
                      
-                      <p class="text-muted mb-0">alex.ray@gmail.com</p>
+                      <p class=" mb-0">alex.ray@gmail.com</p>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <p class="fw-normal mb-1">Consultant</p>
+                  <p class="fw-normal mb-1">title</p>
                  
                 </td>
-                <td>
-                  <span class="badge badge-primary rounded-pill d-inline"
-                        >Onboarding</span
-                    >
+                <td class="backdropFilterBr">
+                    <img src="../assets/dislikered.png" class="vote-icon-liste" alt="Downvote" >
                 </td>
-                <td>Junior</td>
-                <td>
-                  <button
-                          type="button"
-                          class="btn btn-link btn-rounded btn-sm fw-bold"
-                          data-mdb-ripple-color="dark"
-                          >
-                    Edit
-                  </button>
-                </td>
+                
+               
+               
               </tr>
               <tr>
                 <td>
@@ -124,27 +113,20 @@
                     
                     <div class="ms-3">
                       
-                      <p class="text-muted mb-0">kate.hunington@gmail.com</p>
+                      <p class="mb-0">kate.hunington@gmail.com</p>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <p class="fw-normal mb-1">Designer</p>
+                  <p class="fw-normal mb-1">title</p>
                   
                 </td>
-                <td>
-                  <span class="badge badge-warning rounded-pill d-inline">Awaiting</span>
+                <td class="backdropFilterBr">
+                    <img src="../assets/likeblue.png" class="vote-icon-liste" alt="Upvote">
+                  
                 </td>
-                <td>Senior</td>
-                <td>
-                  <button
-                          type="button"
-                          class="btn btn-link btn-rounded btn-sm fw-bold"
-                          data-mdb-ripple-color="dark"
-                          >
-                    Edit
-                  </button>
-                </td>
+                
+                
               </tr>
             </tbody>
           </table>
