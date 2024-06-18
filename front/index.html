@@ -280,9 +280,12 @@
                     success: function (movieDetails) {
                         const posterPath = movieDetails.poster_path;
                         const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : './assets/placeholder.jpg';
+                        const genres = movieDetails.genres.map(genre => genre.name).join(', ');
                         const moviePosterCard = $('<div>').addClass('movie-poster-card')
                                                          .attr('data-movie-id', movieDetails.id)
-                                                         .attr('data-movie-title', movieDetails.title);
+                                                         .attr('data-movie-title', movieDetails.title)
+                                                         .attr('data-movie-genre', genres);
+                                                         
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
@@ -316,11 +319,16 @@
                 const movieCard = $(this).closest('.movie-poster-card');
                 const movieId = movieCard.data('movie-id');
                 const movieTitle = movieCard.data('movie-title');
-                const voteType = $(this).attr('alt'); // 'Upvote' or 'Downvote'
-                console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Vote: ${voteType}`);
-                // Handle the vote here, e.g., send it to the server or update the UI
+                const movieGenre = movieCard.data('movie-genre');
+               
+                const movieImgSrc = movieCard.find('img.movieImg').attr('src'); 
+
+                const voteType = $(this).attr('alt'); 
+                console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Genre: ${movieGenre}, Poster src: ${movieImgSrc}, Vote: ${voteType}`);
+                
             });
         }
+        
     </script>
 </body>
 </html>
