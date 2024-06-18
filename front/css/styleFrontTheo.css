@@ -96,7 +96,7 @@ td{
     /* transition: transform 1s; */
     height: 272px;
     width: 172px;
-
+    margin-bottom: 25px;
 }
 .movie-poster-card:hover {
     position: relative;
@@ -109,6 +109,8 @@ td{
     /* transition: transform 1s; */
     height: 320px;
     width: 202px;
+    margin-bottom: -25px;
+
 
 }
 .movieImg{

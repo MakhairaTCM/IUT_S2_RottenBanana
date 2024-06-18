@@ -304,6 +304,7 @@
                             .append($('<img>').attr('src', './assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
                         moviePosterCard.append(posterImg, movieTitle, voteIcons);
                         moviePostersContainer.append(moviePosterCard);
+                        console.log(movie.id);
                     },
                     error: function() {
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
