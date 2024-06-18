@@ -62,7 +62,7 @@
         </section>
         
         <section class="mb-5">
-            <h2>Hot movies in your area right now</h2>
+            <h2>Trending Movies</h2>
             <div id="movie-posters-random" class="pb-2">
                 <!-- Movie posters will be displayed here -->
             </div>
@@ -159,7 +159,7 @@
     
     <script>
         // First Charts
-        var xValues = ["Very Hot Movie", "Hot Movie", "Movie...", "Shrek Tier...", "Disney"];
+        var xValues = ["Most Popular Movie", "Hot Movie", "Movie...", "...", "..."];
         var yValues = [55, 49, 44, 24, 15];
         var barColors =  "#D94174";
 
@@ -317,17 +317,35 @@
         function addVoteListeners() {
             $(document).off('click', '.vote-icon').on('click', '.vote-icon', function() {
                 const movieCard = $(this).closest('.movie-poster-card');
-                const movieId = movieCard.data('movie-id');
-                const movieTitle = movieCard.data('movie-title');
-                const movieGenre = movieCard.data('movie-genre');
-               
-                const movieImgSrc = movieCard.find('img.movieImg').attr('src'); 
+                const movieId = movieCard.data('movie-id'); // ID du film
+                const movieTitle = movieCard.data('movie-title'); // Titre du film
+                const movieGenre = movieCard.data('movie-genre'); // Genre du film
+                const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
 
-                const voteType = $(this).attr('alt'); 
-                console.log(`Movie ID: ${movieId}, Title: ${movieTitle}, Genre: ${movieGenre}, Poster src: ${movieImgSrc}, Vote: ${voteType}`);
-                
+                const movieData = {
+                    movieId: movieId,
+                    movieTitle: movieTitle,
+                    movieGenre: movieGenre,
+                    movieImgSrc: movieImgSrc,
+                    valide: true // Assumons que valide est toujours vrai pour ce scénario
+                };
+
+                $.ajax({
+                    url: 'film.php',
+                    type: 'POST',
+                    data: movieData,
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                    }
+                });
             });
         }
+
+
+
         
     </script>
 </body>
