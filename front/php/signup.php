@@ -72,20 +72,6 @@ else {
                     <button type="submit" class="btn bg-third text-second btn-block">S'inscrire</button>
                 </form>
             </div>
-            <div class="col-md-6 mb-4">
-                <h2>Connexion</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="loginEmail">Email :</label>
-                        <input type="email" class="form-control" id="loginEmail" name="loginEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Mot de passe :</label>
-                        <input type="password" class="form-control" id="loginPassword" name="loginPassword" required>
-                    </div>
-                    <button type="submit" class="btn bg-third text-second btn-block">Se connecter</button>
-                </form>
-            </div>
         </div>
     </div>
 
