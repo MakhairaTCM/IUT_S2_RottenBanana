@@ -209,7 +209,8 @@ td{
     flex-wrap: nowrap;
     gap: 10px;
     margin-top: 20px;
-    overflow-x: auto;
+    overflow: hidden;
+    overflow-x: scroll;
     white-space: nowrap;
     
 }
