@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'open-sans';
-    src: url(../fonts/Open_Sans/static/OpenSans-Regular.ttf) format(.ttf);
+    src: url(../fonts/Open_Sans/static/OpenSans-Regular.ttf) format('ttf');
    }
 
 html, body {
