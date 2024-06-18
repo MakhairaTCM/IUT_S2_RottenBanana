@@ -3,9 +3,20 @@
     src: url(../fonts/Open_Sans/static/OpenSans-Regular.ttf);
    }
 
+@font-face {
+    font-family: 'open-sans-bold';
+    src: url(../fonts/Open_Sans/static/OpenSans-Bold.ttf);
+   }
+
+@font-face {
+    font-family: 'poppins-regular';
+    src: url(../fonts/Poppins/Poppins-Regular.ttf);
+}
+
 html, body {
     background-color: #261F46;
     color: #D94174;
+    font-family: 'poppins-regular';
 }
 .bg-main {
     background-color: #261F46;
@@ -31,8 +42,8 @@ html, body {
 h1{
     color: #261F46;
     font-size: 30px ;
-    font-family: 'open-sans';
-    font-weight: 300;
+    font-family: 'open-sans-bold';
+    font-weight: 900;
 }
 td{
     color: #261F46 !important;
@@ -125,6 +136,7 @@ td{
     display: block;
     /* margin: 0 auto 10px; */
     transition: transform 0.3s;
+    border-radius: 15px;
 }
 .movie-poster-card:hover img {
     max-width: 180px;
@@ -150,7 +162,9 @@ td{
     top: 235px;
     left: 11px;
     width: 180px;
-    backdrop-filter: hue-rotate(55deg)
+    backdrop-filter: hue-rotate(55deg);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 
 }
 
@@ -257,4 +271,20 @@ td{
     overflow: hidden;
     overflow-x: scroll;
 
+}
+
+.form-control{
+    border-radius: 40px;
+}
+
+.dropdown-toggle{
+    border-radius: 25px;
+}
+
+.dropdown-menu{
+    border-radius: 20px;
+}
+
+.btn{
+    border-radius: 20px;
 }
