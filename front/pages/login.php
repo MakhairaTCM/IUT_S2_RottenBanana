@@ -2,34 +2,42 @@
 $showLoginError = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include("../php/connectAndClose.php");
-    echo "<script>console.log('test')</script>";
+  include("../php/connectAndClose.php");
 
-    $email = $_POST["loginEmail"];
-    $password = $_POST["loginPassword"];
+  $email = $_POST["loginEmail"];
+  $password = $_POST["loginPassword"];
 
-    echo "<script>console.log('email is $email')</script>";
-    echo "<script>console.log('passw is $password')</script>";
+  echo "<script>console.log('email is $email')</script>";
+  echo "<script>console.log('passw is $password')</script>";
+
+  $sql = "SELECT * FROM user WHERE mail='".$email."';";
+  $result = mysqli_query($conn, $sql); 
+  $num = mysqli_num_rows($result);  
+
+  if ($num > 0) {
+    echo "<script>console.log('email is good');</script>";
 
     $sql = "SELECT PASSWORD FROM user WHERE mail='".$email."';";
     $result = mysqli_query($conn, $sql); 
     $row = mysqli_fetch_array($result);
-    $hash = $row[0];
 
-    $check = password_verify($password, $hash);
-    echo "<script>console.log('password is $check')</script>";
+    $hash = "0";
+    if ($row) {$hash = $row[0];}
+    $check = password_verify("$password", "$hash");
 
-    $sql = "SELECT * FROM user WHERE mail='".$email."';";
-    $result = mysqli_query($conn, $sql); 
-    $num = mysqli_num_rows($result);  
-
-    if ($num > 0) {
-      echo `<script>console.log("SUPERBES ON EST CONNECTES WAHOOOOOOOOO");</script>`;
+    if ($check) {
+      echo "<script>console.log('everything is good, connected');</script>";
     }
+
     else {
+      echo "<script>console.log('wrong password');</script>";
       $showLoginError = true;
-      echo `<script>console.log("MOYEN COOL CA");</script>`;
     }
+  }
+  else {
+    echo "<script>console.log('email is wrong');</script>";
+    $showLoginError = true;
+  }
 }
 ?>
 
