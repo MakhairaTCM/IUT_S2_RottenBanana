@@ -14,12 +14,12 @@
 }
 
 html, body {
-    background-color: #261F46;
+    background-color: #181330;
     color: #D94174;
     font-family: 'poppins-regular';
 }
 .bg-main {
-    background-color: #261F46;
+    background-color: #181330;
 }
 .bg-second {
     background-color: #F3EDED;
@@ -36,17 +36,17 @@ html, body {
 }
 .btnRedBody{
     background-color: #D94174;
-    color: #261F46 !important;
+    color: #181330 !important;
 
 }
 h1{
-    color: #261F46;
+    color: #181330;
     font-size: 30px ;
     font-family: 'open-sans-bold';
     font-weight: 900;
 }
 td{
-    color: #261F46 !important;
+    color: #181330 !important;
 }
 
 #movie-posters::-webkit-scrollbar,
@@ -114,6 +114,7 @@ td{
     width: 172px;
     margin-bottom: 25px;
 }
+
 .movie-poster-card:hover {
     position: relative;
     /* border: 1px solid #ccc;
@@ -215,7 +216,7 @@ td{
     top: 10px;
     left: 10px;
     background-color: #D94174;
-    color: #261F46;
+    color: #181330;
     padding: 5px 10px;
     /* border-radius: 5px; */
     font-weight: bold;
