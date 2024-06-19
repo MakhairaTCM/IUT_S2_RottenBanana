@@ -37,7 +37,7 @@
                             Admin
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="./pages/adminList.html">List Movies</a>
+                          <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
                           <a class="dropdown-item" href="./pages/adminModifyAdd.html">Add Movies</a>
                           <a class="dropdown-item" href="./pages/adminListVote.html">List Vote</a>
                         </div>
