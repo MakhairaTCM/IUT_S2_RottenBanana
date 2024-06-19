@@ -1,16 +1,9 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database";
 
-// Crée la connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
+include "./php/conexionAndClose.php";
+$conn = connect();
 
-// Vérifie la connexion
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $movieId = $_POST['movieId'];
@@ -30,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt->close();
+    header("index.php");
 }
 
 $conn->close();

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,10 +19,10 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
-              <a class="navbar-brand" href="./index.html">
+              <a class="navbar-brand" href="./index.php">
                 <img src="./assets/banana.png" alt="a rotten banana" width="28">
               </a>
-              <a href="./index.html" class="mt-auto mb-auto text-decoration-none mr-3">
+              <a href="./index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
               </a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mynavbar">
@@ -67,6 +68,7 @@
                 <!-- Movie posters will be displayed here -->
             </div>
         </section>
+        
         <section class="mb-5">
             <div class="row ml-0">
                 <h2>Community</h2>
@@ -75,41 +77,30 @@
                 </a>
             </div>
             <div id="movie-posters-community" class="pb-2">
-                <div class="movie-poster-card" data-movie-id="1" data-movie-title="titre 1">
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 1</p>
-                    <div class="vote-icons">
-                        <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
-                        <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
-                    </div>
-                </div>
-                <div class="movie-poster-card" data-movie-id="2" data-movie-title="titre 1">
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 1</p>
-                    <div class="vote-icons">
-                        <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
-                        <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
-                    </div>
-                </div>
-                <div class="movie-poster-card" data-movie-id="3" data-movie-title="titre 1">
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 1</p>
-                    <div class="vote-icons">
-                        <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
-                        <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
-                    </div>
-                </div>
-                <div class="movie-poster-card" data-movie-id="4" data-movie-title="titre 1">
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 1</p>
-                    <div class="vote-icons">
-                        <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
-                        <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
-                    </div>
-                </div>
-            </div>
+                <?php 
+                    include "./php/conexionAndClose.php";
+                    $conn = connect();
+                    
+                    $q = $conn->query('SELECT * FROM film LIMIT 50'); 
+                    foreach ($q  as  $film){ ?>
+                    
+                            <div class="movie-poster-card" data-movie-id="1" data-movie-title="<?= $film['titre'];?>">
+                                <img src="<?= $film['url_poster'];?>" alt="Placeholder Image" class="movieImg">
+                                <p><?= $film['titre'];?></p>
+                                <div class="vote-icons">
+                                    <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
+                                    <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
+                                </div>
+                            </div>
+                        
 
+                        <?php } 
+                            $conn->close();
+
+                            ?>
+            </div>
         </section>
+        
         <section class="mb-5">
             <h2>Ranking</h2>
             <div id="movie-posters-ranking" class="pb-2">
@@ -279,7 +270,7 @@
                     },
                     success: function (movieDetails) {
                         const posterPath = movieDetails.poster_path;
-                        const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : './assets/placeholder.jpg';
+                        const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../front/assets/placeholder.jpg';
                         const genres = movieDetails.genres.map(genre => genre.name).join(', ');
                         const moviePosterCard = $('<div>').addClass('movie-poster-card')
                                                          .attr('data-movie-id', movieDetails.id)
@@ -350,3 +341,4 @@
     </script>
 </body>
 </html>
+
