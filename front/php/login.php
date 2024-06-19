@@ -1,4 +1,21 @@
-<!DOCTYPE html>
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "your_database";
+
+// Crée la connexion
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Vérifie la connexion
+if($conn) { 
+    echo "success";  
+}  
+else { 
+    die("Error". mysqli_connect_error());  
+}  
+?>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +29,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <link rel="icon" href="../assets/banana.png">
-    
 </head>
 <body>
     <header>
@@ -27,6 +43,7 @@
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse justify-content-end align-items-center" id="mynavbar">
+              
                 <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
                     <a class="nav-link" href="./login.html">
@@ -40,11 +57,20 @@
     </header>
    
     <div class="container col-md-6 mt-4">
-      <div class="col-md-12 mb-2">
-          <h2 class="text-center">Connect Now</h2> <br>
-            <a href="#" class="btn bg-third text-second btn-block"" role="button">Sign Up</a>
-            <a href="#" class="btn bg-third text-second btn-block"" role="button">Log In</a>
-      </div>
+        <div class="col-md-12 mb-4">
+            <h2>Log In</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" class="form-control" id="signupEmail" name="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" class="form-control" id="signupPassword" name="signupPassword" required>
+                </div>
+                <button type="submit" class="btn bg-third text-second btn-block">Log In</button>
+            </form>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
