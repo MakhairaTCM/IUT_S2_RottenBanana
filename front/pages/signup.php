@@ -1,22 +1,50 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database";
-
-// Crée la connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Vérifie la connexion
-if($conn) { 
-    $status="Connected";  
-}  
-else { 
-    die("Error". mysqli_connect_error());  
-    $status="";
-}  
-?>
-
+$showAlert = false;  
+$showError = false;  
+$exists=false; 
+    
+if($_SERVER["REQUEST_METHOD"] == "POST") { 
+      
+    include("../php/connectAndClose.php");
+    
+    $email = $_POST["signupEmail"];  
+    $password = $_POST["signupPassword"];  
+    $cpassword = $_POST["signupPasswordConfirm"];
+    $sql = "Select * from user where mail='$email'"; 
+    
+      $result = mysqli_query($conn, $sql); 
+    
+    $num = mysqli_num_rows($result);  
+    
+    // This sql query is use to check if 
+    // the email is already present  
+    // or not in our Database 
+    if($num == 0) { 
+        if(($password == $cpassword) && $exists==false) { 
+    
+            $hash = password_hash($password, PASSWORD_DEFAULT); 
+                
+            // Password Hashing is used here.  
+            $sql = "INSERT INTO `user` ( `mail`, `password`, `admin`) VALUES ('$email', '$hash', '0')"; 
+    
+            $result = mysqli_query($conn, $sql); 
+    
+            if ($result) { 
+                $showAlert = true;  
+            } 
+        }  
+        else {  
+            $showError = "Passwords do not match";  
+        }       
+    }// end if  
+    
+   if($num>0)  
+   { 
+      $exists="email not available";  
+   }  
+    
+}//end if    
+?> 
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -36,7 +64,7 @@ else {
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
               <a class="navbar-brand" href="../index.html"><img src="../assets/banana.png" alt="" width="28"></a>
-              <a href="../index.html" class="mt-auto mb-auto text-decoration-none mr-3">
+              <a href="../index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
               </a>
 
@@ -56,11 +84,28 @@ else {
             </div>
           </nav>
     </header>
+    <?php 
+    
+    if($showAlert) { 
+    
+        echo ' Le compte est créé youpi ';  
+    } 
+    
+    if($showError) { 
+    
+        echo ' Les mots de passe ne sont pas les mêmes ';  
+   } 
+        
+    if($exists) { 
+        echo ' Cet adresse email est déjà utilisée ';  
+     } 
+   
+?> 
    
     <div class="container col-md-6 mt-4">
         <div class="col-md-12 mb-4">
             <h2>Sign Up</h2>
-            <form id="signupForm">
+            <form action="signup.php" method="post">
                 <div class="form-group">
                     <label for="signupEmail">Email</label>
                     <input type="email" class="form-control" id="signupEmail" name="signupEmail" required>
@@ -68,6 +113,10 @@ else {
                 <div class="form-group">
                     <label for="signupPassword">Password</label>
                     <input type="password" class="form-control" id="signupPassword" name="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPasswordConfirm">Confirm Password</label>
+                    <input type="password" class="form-control" id="signupPasswordConfirm" name="signupPasswordConfirm" required>
                 </div>
                 <div class="dropdown">
                     <button class="btn dropdown-toggle" type="button" id="signupStatut" data-bs-toggle="dropdown" aria-expanded="false">
