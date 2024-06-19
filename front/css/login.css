@@ -20,3 +20,8 @@ h2 {
     margin-top: 0;
     color: #333;
 }
+
+.dropdown-toggle{
+    background-color: #D94174;
+    color: #ffffff;
+}
