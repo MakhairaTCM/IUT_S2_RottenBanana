@@ -77,22 +77,22 @@
                                 $stmt = $conn->prepare("DELETE FROM Film WHERE id_film = ?");
                                 $stmt->bind_param("i", $movieId);
 
-                                // if ($stmt->execute()) {
-                                //     $message = "Film deleted successfully";
-                                // } else {
-                                //     $message = "Error: " . $stmt->error;
-                                // }
+                                if ($stmt->execute()) {
+                                    $message = "Film deleted successfully";
+                                } else {
+                                    $message = "Error: " . $stmt->error;
+                                }
 
                                 $stmt->close();
                             } elseif (isset($_POST['validate'])) {
                                 $stmt = $conn->prepare("UPDATE Film SET valide = 1 WHERE id_film = ?");
                                 $stmt->bind_param("i", $movieId);
 
-                                // if ($stmt->execute()) {
-                                //     $message = "Film validated successfully";
-                                // } else {
-                                //     $message = "Error: " . $stmt->error;
-                                // }
+                                if ($stmt->execute()) {
+                                    $message = "Film validated successfully";
+                                } else {
+                                    $message = "Error: " . $stmt->error;
+                                }
 
                                 $stmt->close();
                             }

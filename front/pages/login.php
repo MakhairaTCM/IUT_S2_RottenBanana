@@ -34,8 +34,8 @@ else {
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
-              <a class="navbar-brand" href="../index.html"><img src="../assets/banana.png" alt="" width="28"></a>
-              <a href="../index.html" class="mt-auto mb-auto text-decoration-none mr-3">
+              <a class="navbar-brand" href="../index.php"><img src="../assets/banana.png" alt="" width="28"></a>
+              <a href="../index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
               </a>
 
