@@ -19,8 +19,8 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
-              <a class="navbar-brand" href="../index.php"><img src="../assets/banana.png" alt="" width="28"></a>
-              <a href="../index.php" class="mt-auto mb-auto text-decoration-none mr-3">
+              <a class="navbar-brand" href="../index.html"><img src="../assets/banana.png" alt="" width="28"></a>
+              <a href="../index.html" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
                 </a>
 
@@ -34,7 +34,7 @@
                         Admin
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="./adminList.php">List Movies</a>
+                      <a class="dropdown-item" href="./adminList.html">List Movies</a>
                       <a class="dropdown-item" href="./adminModifyAdd.html">Add Movies</a>
                       <a class="dropdown-item" href="./adminListVote.html">List Vote</a>
                     </div>
@@ -57,9 +57,11 @@
             <div class="ml-3 mr-3 mt-5">
                 <div class="row ml-0 mb-4">
                     <h2>Requested movies for communities movies</h2>
-                    <a href="../pages/adminModifyAdd.html" class="btn btnRedBody ml-3 mt-auto mb-auto">
-                        <i class="fas fa-plus"></i> Validate All
-                    </a>
+                    <form method="POST" action="">
+                        <button type="submit" name="validate_all" class="btn btnRedBody ml-3 mt-auto mb-auto">
+                            <i class="fas fa-plus"></i> Validate All
+                        </button>
+                    </form>
                 </div>
 
                 <div class="rowResponsiveAdmin">
@@ -71,36 +73,53 @@
                         // Code pour supprimer le film
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             // $conn = connect();
-                            $movieId = $_POST['movieId'];
 
                             if (isset($_POST['delete'])) {
+                                $movieId = $_POST['movieId'];
+
                                 $stmt = $conn->prepare("DELETE FROM Film WHERE id_film = ?");
                                 $stmt->bind_param("i", $movieId);
 
-                                // if ($stmt->execute()) {
-                                //     $message = "Film deleted successfully";
-                                // } else {
-                                //     $message = "Error: " . $stmt->error;
-                                // }
+                                if ($stmt->execute()) {
+                                    $message = "Film deleted successfully";
+                                } else {
+                                    $message = "Error: " . $stmt->error;
+                                }
 
                                 $stmt->close();
                             } elseif (isset($_POST['validate'])) {
+
+                                $movieId = $_POST['movieId'];
+
                                 $stmt = $conn->prepare("UPDATE Film SET valide = 1 WHERE id_film = ?");
                                 $stmt->bind_param("i", $movieId);
 
-                                // if ($stmt->execute()) {
-                                //     $message = "Film validated successfully";
-                                // } else {
-                                //     $message = "Error: " . $stmt->error;
-                                // }
+                                if ($stmt->execute()) {
+                                    $message = "Film validated successfully";
+                                } else {
+                                    $message = "Error: " . $stmt->error;
+                                }
+
+                                $stmt->close();
+
+                            }elseif (isset($_POST['validate_all'])) {
+                                $stmt = $conn->prepare("UPDATE Film SET valide = 1 WHERE valide = 0");
+
+                                if ($stmt->execute()) {
+                                    $message = "All films validated successfully";
+                                } else {
+                                    $message = "Error: " . $stmt->error;
+                                }
 
                                 $stmt->close();
                             }
 
                             // $conn->close();
                         }
-
                         
+
+
+                        $conn = connect();
                         $q = $conn->query('SELECT * FROM `film` WHERE valide=0;'); 
                         foreach ($q as $film) { ?>
                             <div class="fixedHeightWidthCard">
