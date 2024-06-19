@@ -9,10 +9,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Vérifie la connexion
 if($conn) { 
-    echo "success";  
+    $status="Connected";  
 }  
 else { 
     die("Error". mysqli_connect_error());  
+    $status="";
 }  
 ?>
 
