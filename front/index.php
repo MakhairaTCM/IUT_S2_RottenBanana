@@ -312,12 +312,16 @@
                 const movieTitle = movieCard.data('movie-title'); // Titre du film
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
+                const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
+                const userEmail = 'user@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
                     movieTitle: movieTitle,
                     movieGenre: movieGenre,
                     movieImgSrc: movieImgSrc,
+                    vote: voteValue, // +1 for upvote, -1 for downvote
+                    mail: userEmail,
                     valide: true // Assumons que valide est toujours vrai pour ce scénario
                 };
 
@@ -334,6 +338,8 @@
                 });
             });
         }
+
+
 
 
 
