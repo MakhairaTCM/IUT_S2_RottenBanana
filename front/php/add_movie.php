@@ -25,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("isssi", $movieId, $movieTitle, $movieGenre, $movieImgSrc, $valide);
 
     if ($stmt->execute()) {
-        echo "Film record created successfully";
+        // echo "Film record created successfully";
+        header("location: ../pages/adminModifyAdd.html");
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -36,11 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $conn->close();
 
 // Fonction pour générer un ID unique de 11 chiffres en tant qu'entier
-function generateUniqueMovieId($conn) {
+function generateUniqueMovieId($conn)
+{
     $uniqueId = null;
     do {
-        // Génère un ID unique de 11 chiffres
-        $uniqueId = mt_rand(10000000000, 99999999999); // Utilise des limites pour obtenir un entier de 11 chiffres
+        // Génère un ID unique de 9 chiffres
+        $uniqueId = mt_rand(100000000, 999999999); // Utilise des limites pour obtenir un entier de 11 chiffres
         // Vérifie si l'ID généré existe déjà dans la base de données
         $query = "SELECT id_film FROM Film WHERE id_film = ?";
         $stmt = $conn->prepare($query);
@@ -53,6 +55,4 @@ function generateUniqueMovieId($conn) {
 
     return $uniqueId;
 }
-header("location: ./adminModifyAdmin.html");
-
-?>
+// header("location: ./adminModifyAdmin.html");
