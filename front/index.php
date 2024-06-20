@@ -20,7 +20,7 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
               <a class="navbar-brand" href="./index.php">
-                <img src="./assets/banana.png" alt="a rotten banana" width="28">
+                <img src="./assets/banana.png" alt="logo of the website : a rotten banana" width="28">
               </a>
               <a href="./index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
@@ -84,8 +84,8 @@
                     $q = $conn->query('SELECT * FROM film LIMIT 50'); 
                     foreach ($q  as  $film){ ?>
                     
-                            <div class="movie-poster-card" data-movie-id="1" data-movie-title="<?= $film['titre'];?>">
-                                <img src="<?= $film['url_poster'];?>" alt="Placeholder Image" class="movieImg">
+                            <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre'];?>">
+                                <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
                                     <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
@@ -95,7 +95,7 @@
                         
 
                         <?php } 
-                            $conn->close();
+                            // $conn->close();
 
                             ?>
             </div>
@@ -104,35 +104,24 @@
         <section class="mb-5">
             <h2>Ranking</h2>
             <div id="movie-posters-ranking" class="pb-2">
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">1er</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 1</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">2ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 2</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">3ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 3</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">4ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 4</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">5ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 5</p>
-                </div>
-               
+                <?php 
+                    $q = $conn->query('SELECT film.titre, film.genre, film.url_poster, film.id_film, SUM(vote.vote) AS total_votes FROM film INNER JOIN vote ON film.id_film = vote.id_film GROUP BY film.id_film, film.titre, film.genre, film.url_poster ORDER BY total_votes DESC LIMIT 20;'); 
+                    $films = $q->fetch_all(MYSQLI_ASSOC); // Fetch all results into an associative array
+                    for ($i = 0; $i < count($films); $i++) {
+                        $film = $films[$i];
+                ?>
+                        <div class="movie-poster-card-ranking">
+                            <div class="ranking-badge"><?= $i+1; ?></div>
+                            <img src="<?= $film['url_poster']; ?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
+                            <p><?= $film['titre']; ?></p>
+                        </div>
+                <?php 
+                    } 
+                    $conn->close();
+                ?>
             </div>
         </section>
-        <section class="mb-5">
+                <section class="mb-5">
             <h2>Results Charts</h2>
             <div class="ligneFlex pb-1">
                 <canvas id="myChart1" style="width:100%;max-width:700px" class="bg-light border rounded mb-3"></canvas>
@@ -150,27 +139,50 @@
     
     <script>
         // First Charts
-        var xValues = ["Most Popular Movie", "Hot Movie", "Movie...", "...", "..."];
-        var yValues = [55, 49, 44, 24, 15];
-        var barColors =  "#D94174";
-
-        new Chart("myChart1", {
-            type: "bar",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                legend: {display: false},
-                title: {
-                    display: true,
-                    text: "Most Popular Movie"
-                }
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTopVotedMovies();
         });
+
+        function fetchTopVotedMovies() {
+            $.ajax({
+                url: './php/getTopVotedMovies.php', // PHP file to fetch top voted movies
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    const xValues = data.map(movie => movie.titre);
+                    const yValues = data.map(movie => movie.total_votes);
+                    const barColors = "#D94174";
+
+                    new Chart("myChart1", {
+                        type: "bar",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true 
+                                    }
+                                }]
+                            },
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: "Most Popular Movies"
+                            }
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching top voted movies:', error);
+                }
+            });
+        }
 
         // Second Chart
         var xValues = ["Action", "Adventure", "Drama", "Independant", "Thriller"];
@@ -313,7 +325,7 @@
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
-                const userEmail = 'user@example.com'; // Replace this with actual user email
+                const userEmail = 'user3@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
