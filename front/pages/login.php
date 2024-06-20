@@ -84,13 +84,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php 
     if($showLoginError) {
 
-        echo ' Email or Password is incorrect ';
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger justify-content-center col-3 mt-4">Email or password is incorrect</div></div>';
       }
     ?>
 
     <div class="container col-md-6 mt-4">
         <div class="col-md-12 mb-4">
-            <h2>Log In</h2>
+            <h2 class="text-center mb-2">Log In</h2>
             <form id="loginForm" action="login.php" method="post">
                 <div class="form-group">
                     <label for="loginEmail">Email</label>
