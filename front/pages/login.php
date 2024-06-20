@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($check) {
       echo "<script>console.log('everything is good, connected');</script>";
+      header("Location: ../index.php");
     }
 
     else {
@@ -88,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     ?>
 
-    <div class="container col-md-6 mt-4">
+    <div class="container col-md-5 mt-4">
         <div class="col-md-12 mb-4">
             <h2>Log In</h2>
             <form id="loginForm" action="login.php" method="post">
