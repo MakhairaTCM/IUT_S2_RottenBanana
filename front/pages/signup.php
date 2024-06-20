@@ -88,23 +88,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if($showAlert) { 
     
-        echo ' Le compte est créé youpi ';  
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-success col-4 mt-4">Account successfully created</div></div>';  
     } 
     
     if($showError) { 
     
-        echo ' Les mots de passe ne sont pas les mêmes ';  
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger col-3 mt-4">Passwords do not match</div></div>';  
    } 
         
     if($exists) { 
-        echo ' Cet adresse email est déjà utilisée ';  
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger col-5 mt-4">Oops, looks like this email address is already in use</div></div>';  
      } 
    
 ?> 
    
-    <div class="container col-md-6 mt-4">
+    <div class="container col-md-5 mt-4">
         <div class="col-md-12 mb-4">
-            <h2>Sign Up</h2>
+            <h2 class="text-center mb-2">Sign Up</h2>
             <form action="signup.php" method="post">
                 <div class="form-group">
                     <label for="signupEmail">Email</label>
@@ -117,17 +117,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group">
                     <label for="signupPasswordConfirm">Confirm Password</label>
                     <input type="password" class="form-control" id="signupPasswordConfirm" name="signupPasswordConfirm" required>
-                </div>
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle" type="button" id="signupStatut" data-bs-toggle="dropdown" aria-expanded="false">
-                      Statut
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li><a class="dropdown-item" href="#">1st Year</a></li>
-                      <li><a class="dropdown-item" href="#">2nd Year</a></li>
-                      <li><a class="dropdown-item" href="#">3rd Year</a></li>
-                      <li><a class="dropdown-item" href="#">Teacher</a></li>
-                    </ul>
                 </div>
                 <br>
                 <button type="submit" class="btn bg-third text-second btn-block">Sign Up</button>
