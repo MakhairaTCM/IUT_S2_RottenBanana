@@ -39,7 +39,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
                           <a class="dropdown-item" href="./pages/adminModifyAdd.html">Add Movies</a>
-                          <a class="dropdown-item" href="./pages/adminListVote.html">List Vote</a>
+                          <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
                         </div>
                     </div>
                 </div>
@@ -145,13 +145,15 @@
 
         function fetchTopVotedMovies() {
             $.ajax({
-                url: './php/getTopVotedMovies.php', // PHP file to fetch top voted movies
+                url: './php/getTopVotedMovies.php', 
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     const xValues = data.map(movie => movie.titre);
                     const yValues = data.map(movie => movie.total_votes);
-                    const barColors = "#D94174";
+
+                    
+                    const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
 
                     new Chart("myChart1", {
                         type: "bar",
@@ -184,13 +186,28 @@
             });
         }
 
+
         // Second Chart
+        // function generateRandomColors(numColors) {
+        //     const colors = [];
+        //     for (let i = 0; i < numColors; i++) {
+        //         const color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+        //         colors.push(color);
+        //     }
+        //     return colors;
+        // }
         fetch('./php/data_genre.php')
         .then(response => response.json())
         .then(data => {
             var xValues = data.map(item => item.genre);
             var yValues = data.map(item => item.total_votes_genre);
-            var barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
+
+            // var barColors = generateRandomColors(xValues.length);
+            // const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
+
+            const colors = ['#D94174', '#181330', '#FFDE17'];
+            const barColors = xValues.map((_, index) => colors[index % colors.length]);
+
 
             new Chart("myChart", {
                 type: "pie",
@@ -212,7 +229,7 @@
 
         document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
-            addVoteListeners(); // Ensure listeners are added on initial load
+            addVoteListeners(); 
         });
     
         function fetchRandomMovies() {
