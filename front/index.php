@@ -84,7 +84,7 @@
                     $q = $conn->query('SELECT * FROM film LIMIT 50'); 
                     foreach ($q  as  $film){ ?>
                     
-                            <div class="movie-poster-card" data-movie-id="1" data-movie-title="<?= $film['titre'];?>">
+                            <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre'];?>">
                                 <img src="<?= $film['url_poster'];?>" alt="Placeholder Image" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
