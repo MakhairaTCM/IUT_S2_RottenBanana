@@ -139,27 +139,50 @@
     
     <script>
         // First Charts
-        var xValues = ["Most Popular Movie", "Hot Movie", "Movie...", "...", "..."];
-        var yValues = [55, 49, 44, 24, 15];
-        var barColors =  "#D94174";
-
-        new Chart("myChart1", {
-            type: "bar",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                legend: {display: false},
-                title: {
-                    display: true,
-                    text: "Most Popular Movie"
-                }
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTopVotedMovies();
         });
+
+        function fetchTopVotedMovies() {
+            $.ajax({
+                url: './php/getTopVotedMovies.php', // PHP file to fetch top voted movies
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    const xValues = data.map(movie => movie.titre);
+                    const yValues = data.map(movie => movie.total_votes);
+                    const barColors = "#D94174";
+
+                    new Chart("myChart1", {
+                        type: "bar",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true 
+                                    }
+                                }]
+                            },
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: "Most Popular Movies"
+                            }
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching top voted movies:', error);
+                }
+            });
+        }
 
         // Second Chart
         var xValues = ["Action", "Adventure", "Drama", "Independant", "Thriller"];
@@ -302,7 +325,7 @@
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
-                const userEmail = 'user2@example.com'; // Replace this with actual user email
+                const userEmail = 'user3@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
