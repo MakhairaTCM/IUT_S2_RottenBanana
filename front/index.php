@@ -411,7 +411,7 @@
                     movieImgSrc: movieImgSrc,
                     vote: voteValue, // +1 for upvote, -1 for downvote
                     mail: userEmail,
-                    valide: true // Assumons que valide est toujours vrai pour ce scénario
+                    valide: 1 // because u don't need to validate a movie already present in the api 
                 };
 
                 $.ajax({
