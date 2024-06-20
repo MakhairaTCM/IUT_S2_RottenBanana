@@ -126,6 +126,8 @@
             <div class="ligneFlex pb-1">
                 <canvas id="myChart1" style="width:100%;max-width:700px" class="bg-light border rounded mb-3"></canvas>
                 <canvas id="myChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3"></canvas>
+                <canvas id="marksChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3"></canvas>
+
             </div>
         </section>
     </main>
@@ -138,6 +140,57 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     
     <script>
+
+    fetch('./php/getVotedMovies.php')
+        .then(response => response.json())
+        .then(data => {
+            var marksCanvas = document.getElementById("marksChart");
+
+            var movies = data.map(item => item.title);
+            var countLike = data.map(item => item.count_like);
+            var countDislike = data.map(item => item.count_dislike);
+
+            var marksData = {
+                labels: movies,
+                datasets: [{
+                    label: "Positive Votes",
+                    backgroundColor: "rgba(24,19,48,0.3)",
+                    data: countLike
+                }, {
+                    label: "Dislike Votes",
+                    backgroundColor: "rgba(217,65,116,0.3)",
+                    data: countDislike
+                }]
+            };
+
+            var radarChart = new Chart(marksCanvas, {
+                type: 'radar',
+                data: marksData,
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            stepSize: 2
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Movie Votes (Likes vs Dislikes)',
+                        // fontSize: 18,
+                        fontColor: '#333' // Optional: specify font color
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+
+
+
+
+
         // First Charts
         document.addEventListener('DOMContentLoaded', function() {
             fetchTopVotedMovies();
@@ -349,7 +402,7 @@
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
-                const userEmail = 'user2@example.com'; // Replace this with actual user email
+                const userEmail = 'user1@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
