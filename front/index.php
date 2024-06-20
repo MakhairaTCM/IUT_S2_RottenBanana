@@ -20,7 +20,7 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
               <a class="navbar-brand" href="./index.php">
-                <img src="./assets/banana.png" alt="a rotten banana" width="28">
+                <img src="./assets/banana.png" alt="logo of the website : a rotten banana" width="28">
               </a>
               <a href="./index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
@@ -85,7 +85,7 @@
                     foreach ($q  as  $film){ ?>
                     
                             <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre'];?>">
-                                <img src="<?= $film['url_poster'];?>" alt="Placeholder Image" class="movieImg">
+                                <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
                                     <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
@@ -112,8 +112,8 @@
                 ?>
                         <div class="movie-poster-card-ranking">
                             <div class="ranking-badge"><?= $i+1; ?></div>
-                            <img src="<?= $film['url_poster']; ?>" alt="Poster for <?= htmlspecialchars($film['titre']); ?>" class="movieImg">
-                            <p><?= htmlspecialchars($film['titre']); ?></p>
+                            <img src="<?= $film['url_poster']; ?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
+                            <p><?= $film['titre']; ?></p>
                         </div>
                 <?php 
                     } 
