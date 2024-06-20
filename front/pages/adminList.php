@@ -168,7 +168,10 @@
                                         <h5 class="card-title"><?= $film['titre'];?></h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btnRedBody mr-2 mt-auto mb-auto">Edit</button>
+                                                <button type="button" class="btn btnRedBody mr-2 mt-auto mb-auto">
+                                                    <a href="edit_movie.php?movieId=<?= $film['id_film']; ?>" class="text-white">Edit</a>
+                                                </button>
+
                                                 <form method="POST" action="">
                                                     <input type="hidden" name="movieId" value="<?= $film['id_film']; ?>">
                                                     <button type="submit" name="delete" class="btn btnRedBody mt-auto mb-auto">Delete</button>

@@ -4,46 +4,66 @@ $username = "root";
 $password = "";
 $dbname = "your_database";
 
-// Crée la connexion
+// Create the connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Vérifie la connexion
+// Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Génère un ID unique de 11 chiffres en tant qu'entier
-    $movieId = generateUniqueMovieId($conn);
+    // Check if movieId is set to determine if it's an update or new movie
+    if (isset($_POST['movieId']) && !empty($_POST['movieId'])) {
+        $movieId = $_POST['movieId'];
+        $movieTitle = $_POST['movieTitle'];
+        $movieGenre = $_POST['movieGenre'];
+        $movieImgSrc = $_POST['movieImgSrc'];
 
-    $movieTitle = $_POST['movieTitle'];
-    $movieGenre = $_POST['movieGenre'];
-    $movieImgSrc = $_POST['movieImgSrc'];
-    $valide = 0; // Initialise à 0, comme requis
+        // Update the existing movie
+        $stmt = $conn->prepare("UPDATE Film SET titre = ?, genre = ?, url_poster = ? WHERE id_film = ?");
+        $stmt->bind_param("sssi", $movieTitle, $movieGenre, $movieImgSrc, $movieId);
 
-    $stmt = $conn->prepare("INSERT INTO Film (id_film, titre, genre, url_poster, valide) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("isssi", $movieId, $movieTitle, $movieGenre, $movieImgSrc, $valide);
+        if ($stmt->execute()) {
+            // Redirect to the admin list page after update
+            header("location: ../pages/adminList.php");
+        } else {
+            echo "Error: " . $stmt->error;
+        }
 
-    if ($stmt->execute()) {
-        // echo "Film record created successfully";
-        header("location: ../pages/adminModifyAdd.html");
+        $stmt->close();
     } else {
-        echo "Error: " . $stmt->error;
-    }
+        // Adding a new movie
+        $movieId = generateUniqueMovieId($conn);
+        $movieTitle = $_POST['movieTitle'];
+        $movieGenre = $_POST['movieGenre'];
+        $movieImgSrc = $_POST['movieImgSrc'];
+        $valide = 0; // Initialize to 0, as required
 
-    $stmt->close();
+        $stmt = $conn->prepare("INSERT INTO Film (id_film, titre, genre, url_poster, valide) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssi", $movieId, $movieTitle, $movieGenre, $movieImgSrc, $valide);
+
+        if ($stmt->execute()) {
+            // Redirect to the add movie page after insertion
+            header("location: ../pages/adminModifyAdd.html");
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
 }
 
 $conn->close();
 
-// Fonction pour générer un ID unique de 11 chiffres en tant qu'entier
+// Function to generate a unique movie ID
 function generateUniqueMovieId($conn)
 {
     $uniqueId = null;
     do {
-        // Génère un ID unique de 9 chiffres
-        $uniqueId = mt_rand(100000000, 999999999); // Utilise des limites pour obtenir un entier de 11 chiffres
-        // Vérifie si l'ID généré existe déjà dans la base de données
+        // Generate a unique ID of 9 digits
+        $uniqueId = mt_rand(100000000, 999999999); // Use limits to get a 9-digit integer
+        // Check if the generated ID already exists in the database
         $query = "SELECT id_film FROM Film WHERE id_film = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $uniqueId);
@@ -55,4 +75,4 @@ function generateUniqueMovieId($conn)
 
     return $uniqueId;
 }
-// header("location: ./adminModifyAdmin.html");
+?>
