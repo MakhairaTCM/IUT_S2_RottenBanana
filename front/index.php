@@ -273,6 +273,7 @@
         function displayMovies(movies, containerSelector) {
             const moviePostersContainer = $(containerSelector);
             moviePostersContainer.empty();
+            
             movies.forEach(movie => {
                 $.ajax({
                     url: `https://api.themoviedb.org/3/movie/${movie.id}`,
@@ -283,17 +284,23 @@
                     success: function (movieDetails) {
                         const posterPath = movieDetails.poster_path;
                         const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../front/assets/placeholder.jpg';
-                        const genres = movieDetails.genres.map(genre => genre.name).join(', ');
+                        
+                        let firstGenre = 'Genre Not Available';
+                        if (movieDetails.genres.length > 0) {
+                            firstGenre = movieDetails.genres[0].name;
+                        }
+                        
                         const moviePosterCard = $('<div>').addClass('movie-poster-card')
-                                                         .attr('data-movie-id', movieDetails.id)
-                                                         .attr('data-movie-title', movieDetails.title)
-                                                         .attr('data-movie-genre', genres);
-                                                         
+                                                        .attr('data-movie-id', movieDetails.id)
+                                                        .attr('data-movie-title', movieDetails.title)
+                                                        .attr('data-movie-genre', firstGenre);
+                                                        
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
                             .append($('<img>').attr('src', './assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote'))
                             .append($('<img>').attr('src', './assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
+                        
                         moviePosterCard.append(posterImg, movieTitle, voteIcons);
                         moviePostersContainer.append(moviePosterCard);
                         addVoteListeners(); // Add listeners after each movie card is appended
@@ -302,11 +309,13 @@
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
                         const posterImg = $('<img>').attr('src', './assets/placeholder.jpg').attr('alt', 'No Poster Available');
                         const errorMsg = $('<p>').text(movie.title);
+                        
                         moviePosterCard.append(posterImg, errorMsg);
                         moviePostersContainer.append(moviePosterCard);
                     }
                 });
             });
+
 
             if (containerSelector === '#movie-posters' && !searchResultsAdded) {
                 $('#search-results-section').show();
