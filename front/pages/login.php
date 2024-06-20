@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
-              <a class="navbar-brand" href="../index.html"><img src="../assets/banana.png" alt="" width="28"></a>
+              <a class="navbar-brand" href="../index.php"><img src="../assets/banana.png" alt="" width="28"></a>
               <a href="../index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
               </a>
@@ -85,13 +85,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php 
     if($showLoginError) {
 
-        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger justify-content-center col-3 mt-4">Email or password is incorrect</div></div>';
+        echo ' Email or Password is incorrect ';
       }
     ?>
 
     <div class="container col-md-5 mt-4">
         <div class="col-md-12 mb-4">
-            <h2 class="text-center mb-2">Log In</h2>
+            <h2>Log In</h2>
             <form id="loginForm" action="login.php" method="post">
                 <div class="form-group">
                     <label for="loginEmail">Email</label>
