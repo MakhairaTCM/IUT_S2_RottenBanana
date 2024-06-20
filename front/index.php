@@ -81,10 +81,10 @@
                     include "./php/conexionAndClose.php";
                     $conn = connect();
                     
-                    $q = $conn->query('SELECT * FROM film LIMIT 50'); 
+                    $q = $conn->query('SELECT * FROM `film` WHERE valide=1 LIMIT 50;'); 
                     foreach ($q  as  $film){ ?>
                     
-                            <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre'];?>">
+                            <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre']; ?>" data-movie-genre="<?= $film['genre']; ?>">
                                 <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
@@ -185,31 +185,29 @@
         }
 
         // Second Chart
-        var xValues = ["Action", "Adventure", "Drama", "Independant", "Thriller"];
-        var yValues = [55, 49, 44, 24, 15];
-        var barColors = [
-            "#b91d47",
-            "#00aba9",
-            "#2b5797",
-            "#e8c3b9",
-            "#1e7145"
-        ];
+        fetch('./php/data_genre.php')
+        .then(response => response.json())
+        .then(data => {
+            var xValues = data.map(item => item.genre);
+            var yValues = data.map(item => item.total_votes_genre);
+            var barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
 
-        new Chart("myChart", {
-            type: "pie",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: "Voted Movie Genre"
+            new Chart("myChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Voted Movie Genre"
+                    }
                 }
-            }
+            });
         });
 
         document.addEventListener('DOMContentLoaded', e => {
@@ -334,7 +332,7 @@
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
-                const userEmail = 'user3@example.com'; // Replace this with actual user email
+                const userEmail = 'user2@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
