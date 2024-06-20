@@ -95,7 +95,7 @@
                         
 
                         <?php } 
-                            $conn->close();
+                            // $conn->close();
 
                             ?>
             </div>
@@ -104,35 +104,24 @@
         <section class="mb-5">
             <h2>Ranking</h2>
             <div id="movie-posters-ranking" class="pb-2">
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">1er</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 1</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">2ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 2</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">3ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 3</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">4ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 4</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">5ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 5</p>
-                </div>
-               
+                <?php 
+                    $q = $conn->query('SELECT film.titre, film.genre, film.url_poster, film.id_film, SUM(vote.vote) AS total_votes FROM film INNER JOIN vote ON film.id_film = vote.id_film GROUP BY film.id_film, film.titre, film.genre, film.url_poster ORDER BY total_votes DESC LIMIT 20;'); 
+                    $films = $q->fetch_all(MYSQLI_ASSOC); // Fetch all results into an associative array
+                    for ($i = 0; $i < count($films); $i++) {
+                        $film = $films[$i];
+                ?>
+                        <div class="movie-poster-card-ranking">
+                            <div class="ranking-badge"><?= $i+1; ?></div>
+                            <img src="<?= $film['url_poster']; ?>" alt="Poster for <?= htmlspecialchars($film['titre']); ?>" class="movieImg">
+                            <p><?= htmlspecialchars($film['titre']); ?></p>
+                        </div>
+                <?php 
+                    } 
+                    $conn->close();
+                ?>
             </div>
         </section>
-        <section class="mb-5">
+                <section class="mb-5">
             <h2>Results Charts</h2>
             <div class="ligneFlex pb-1">
                 <canvas id="myChart1" style="width:100%;max-width:700px" class="bg-light border rounded mb-3"></canvas>
@@ -313,7 +302,7 @@
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
-                const userEmail = 'user@example.com'; // Replace this with actual user email
+                const userEmail = 'user2@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
