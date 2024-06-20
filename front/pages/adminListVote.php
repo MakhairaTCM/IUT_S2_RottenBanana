@@ -66,33 +66,35 @@
             </thead>
             <tbody>
               <?php 
-                      include "../php/conexionAndClose.php";
-                      $conn = connect();
+                include "../php/conexionAndClose.php";
+                $conn = connect();
+                
+                $q = $conn->query('SELECT vote.mail, film.titre, vote.vote FROM `user` INNER JOIN vote ON user.mail=vote.mail INNER JOIN film ON vote.id_film=film.id_film;'); 
+                
+                foreach ($q as $vote) { ?>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="mb-0"><?= htmlspecialchars($vote['mail']); ?></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1"><?= htmlspecialchars($vote['titre']); ?></p>
+                        </td>
+                        <td class="backdropFilterBr">
+                            <?php if ($vote['vote'] == 1) { ?>
+                                <img src="../assets/likeblue.png" class="vote-icon-liste" alt="Upvote">
+                            <?php } else{ ?>
+                                <img src="../assets/dislikered.png" class="vote-icon-liste" alt="Downvote">
+                            <?php } ?>
+                        </td>
+                    </tr>
+                <?php } 
+                $conn->close();
 
-                      $q = $conn->query('SELECT vote.mail, film.titre, vote.vote FROM `user` INNER JOIN vote ON user.mail=vote.mail INNER JOIN film ON vote.id_film=film.id_film;'); 
-
-                      foreach ($q  as  $vote){ ?>
-                              <tr>
-                                <td>
-                                  <div class="d-flex align-items-center">
-                                    <div class="ms-3">
-                                      <p class=" mb-0"><?= $vote['mail'];?></p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td>
-                                  <p class="fw-normal mb-1"><?= $vote['titre'];?></p>
-                                </td>
-                                <td class="backdropFilterBr">
-                                    <!-- <img src="../assets/likeblue.png" class="vote-icon-liste" alt="Upvote"> -->
-                                     <p><?= $vote['vote'];?></p>
-
-                                </td>
-                              </tr>
-                          <?php } 
-                              $conn->close();
-
-                              ?>
+                ?>
             </tbody>
           </table>
         
