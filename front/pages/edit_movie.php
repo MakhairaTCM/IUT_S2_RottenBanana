@@ -72,6 +72,10 @@ if (isset($_GET['movieId'])) {
                     <input type="text" class="form-control" id="movieImgSrc" name="movieImgSrc" placeholder="Enter movie poster URL" value="<?= $film['url_poster']; ?>" required>
                 </div>
                 <div class="form-group">
+                    <label for="movieSummary">Movie Summary</label>
+                    <textarea class="form-control" id="movieSummary" name="movieSummary" placeholder="Enter Summary here" rows="5" required><?= $film['resumer']; ?></textarea>
+                </div>
+                <div class="form-group">
                     <label for="movieGenre">Movie Genre</label>
                     <select class="form-control" id="movieGenre" name="movieGenre" required>
                         <option value="Action" <?= $film['genre'] == 'Action' ? 'selected' : ''; ?>>Action</option>

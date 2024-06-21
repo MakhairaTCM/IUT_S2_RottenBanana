@@ -19,10 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $movieTitle = $_POST['movieTitle'];
         $movieGenre = $_POST['movieGenre'];
         $movieImgSrc = $_POST['movieImgSrc'];
+        $movieSummary = $_POST['movieSummary'];
 
         // Update the existing movie
-        $stmt = $conn->prepare("UPDATE Film SET titre = ?, genre = ?, url_poster = ? WHERE id_film = ?");
-        $stmt->bind_param("sssi", $movieTitle, $movieGenre, $movieImgSrc, $movieId);
+        $stmt = $conn->prepare("UPDATE Film SET titre = ?, genre = ?, url_poster = ?, resumer = ? WHERE id_film = ?");
+        $stmt->bind_param("ssssi", $movieTitle, $movieGenre, $movieImgSrc, $movieSummary, $movieId);
 
         if ($stmt->execute()) {
             // Redirect to the admin list page after update
@@ -40,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $movieImgSrc = $_POST['movieImgSrc'];
         $valide = 0; // Initialize to 0, as required
 
-        $stmt = $conn->prepare("INSERT INTO Film (id_film, titre, genre, url_poster, valide) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssi", $movieId, $movieTitle, $movieGenre, $movieImgSrc, $valide);
+        $stmt = $conn->prepare("INSERT INTO Film (id_film, titre, genre, url_poster, resumer, valide) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("issssi", $movieId, $movieTitle, $movieGenre, $movieImgSrc, $movieSummary, $valide);
 
         if ($stmt->execute()) {
             // Redirect to the add movie page after insertion

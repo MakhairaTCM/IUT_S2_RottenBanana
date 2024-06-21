@@ -91,6 +91,10 @@
                                     <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
                                     <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
                                 </div>
+                                <div class="resume">
+                                    <p>Summary :</p>
+                                    <p><?= $film['resumer'];?></p>
+                                </div>
                             </div>
                         
 
@@ -328,7 +332,8 @@
                 success: function (data) {
                     const movies = data.results.map(movie => ({
                         id: movie.id,
-                        title: movie.title
+                        title: movie.title,
+                        summary: movie.overview
                     }));
                     displayMovies(movies, '#movie-posters');
                 },
@@ -361,7 +366,8 @@
                         const moviePosterCard = $('<div>').addClass('movie-poster-card')
                                                         .attr('data-movie-id', movieDetails.id)
                                                         .attr('data-movie-title', movieDetails.title)
-                                                        .attr('data-movie-genre', firstGenre);
+                                                        .attr('data-movie-genre', firstGenre)
+                                                        .attr('data-movie-summary', movieDetails.overview);
                                                         
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
@@ -369,7 +375,11 @@
                             .append($('<img>').attr('src', './assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote'))
                             .append($('<img>').attr('src', './assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
                         
-                        moviePosterCard.append(posterImg, movieTitle, voteIcons);
+                        const summary = $('<div>').addClass('resume')
+                            .append($('<p>').text("Summary:"))
+                            .append($('<p>').text(movieDetails.overview)).addClass('resumeContent');
+
+                        moviePosterCard.append(posterImg, movieTitle, voteIcons, summary);
                         moviePostersContainer.append(moviePosterCard);
                         addVoteListeners(); // Add listeners after each movie card is appended
                     },
@@ -384,12 +394,12 @@
                 });
             });
 
-
             if (containerSelector === '#movie-posters' && !searchResultsAdded) {
                 $('#search-results-section').show();
                 searchResultsAdded = true;
             }
         }
+
 
         let searchResultsAdded = false;
         $('#search-results-section').hide(); 
@@ -401,6 +411,9 @@
                 const movieTitle = movieCard.data('movie-title'); // Titre du film
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
+                const movieSummary = movieCard.data('movie-summary');
+
+
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
                 const userEmail = 'user1@example.com'; // Replace this with actual user email
 
@@ -409,9 +422,11 @@
                     movieTitle: movieTitle,
                     movieGenre: movieGenre,
                     movieImgSrc: movieImgSrc,
+                    valide: 1, // because u don't need to validate a movie already present in the api 
+                    movieSummary: movieSummary,
+
                     vote: voteValue, // +1 for upvote, -1 for downvote
-                    mail: userEmail,
-                    valide: 1 // because u don't need to validate a movie already present in the api 
+                    mail: userEmail
                 };
 
                 $.ajax({
