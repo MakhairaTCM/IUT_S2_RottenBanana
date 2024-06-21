@@ -7,15 +7,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email = $_POST["loginEmail"];
   $password = $_POST["loginPassword"];
 
-  echo "<script>console.log('email is $email')</script>";
-  echo "<script>console.log('passw is $password')</script>";
-
   $sql = "SELECT * FROM user WHERE mail='".$email."';";
   $result = mysqli_query($conn, $sql); 
   $num = mysqli_num_rows($result);  
 
   if ($num > 0) {
-    echo "<script>console.log('email is good');</script>";
 
     $sql = "SELECT PASSWORD FROM user WHERE mail='".$email."';";
     $result = mysqli_query($conn, $sql); 
@@ -26,17 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $check = password_verify("$password", "$hash");
 
     if ($check) {
-      echo "<script>console.log('everything is good, connected');</script>";
       header("Location: ../index.php");
     }
 
     else {
-      echo "<script>console.log('wrong password');</script>";
+      echo "<script>console.log('Email or password wrong');</script>";
       $showLoginError = true;
     }
   }
   else {
-    echo "<script>console.log('email is wrong');</script>";
+    echo "<script>console.log('Email or password wrong');</script>";
     $showLoginError = true;
   }
 }
@@ -85,13 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php 
     if($showLoginError) {
 
-        echo ' Email or Password is incorrect ';
+        echo ' <div class="container-fluid row justify-content-center"><div class="alert alert-danger col-3 mt-4 text-center">Email or Password is wrong</div></div> ';
       }
     ?>
 
     <div class="container col-md-5 mt-4">
         <div class="col-md-12 mb-4">
-            <h2>Log In</h2>
+            <h2 class="text-center">Log In</h2>
             <form id="loginForm" action="login.php" method="post">
                 <div class="form-group">
                     <label for="loginEmail">Email</label>

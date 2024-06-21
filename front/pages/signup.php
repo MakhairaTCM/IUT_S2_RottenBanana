@@ -87,19 +87,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php 
     
     if($showAlert) { 
-    
-        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-success col-4 mt-4">Account successfully created</div></div>';  
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-success col-4 mt-4 text-center">Account successfully created</div></div>';  
     } 
-    
     if($showError) { 
-    
-        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger col-3 mt-4">Passwords do not match</div></div>';  
-   } 
-        
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger col-3 mt-4 text-center">Passwords do not match</div></div>';  
+    }   
     if($exists) { 
-        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger col-5 mt-4">Oops, looks like this email address is already in use</div></div>';  
-     } 
-   
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger col-5 mt-4 text-center">Oops, looks like this email address is already in use</div></div>';  
+    } 
 ?> 
    
     <div class="container col-md-5 mt-4">
