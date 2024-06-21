@@ -101,6 +101,17 @@
                                 }
 
                                 $stmt->close();
+
+                            }elseif (isset($_POST['validate_all'])) {
+                                $stmt = $conn->prepare("UPDATE Film SET valide = 1 WHERE valide = 0");
+
+                                if ($stmt->execute()) {
+                                    $message = "All films validated successfully";
+                                } else {
+                                    $message = "Error: " . $stmt->error;
+                                }
+
+                                $stmt->close();
                             }
 
                             // $conn->close();
