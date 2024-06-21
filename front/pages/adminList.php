@@ -57,9 +57,11 @@
             <div class="ml-3 mr-3 mt-5">
                 <div class="row ml-0 mb-4">
                     <h2>Requested movies for communities movies</h2>
-                    <a href="../pages/adminModifyAdd.html" class="btn btnRedBody ml-3 mt-auto mb-auto">
-                        <i class="fas fa-plus"></i> Validate All
-                    </a>
+                    <form method="POST" action="">
+                        <button type="submit" name="validate_all" class="btn btnRedBody ml-3 mt-auto mb-auto">
+                            <i class="fas fa-plus"></i> Validate All
+                        </button>
+                    </form>
                 </div>
 
                 <div class="rowResponsiveAdmin">
@@ -71,9 +73,10 @@
                         // Code pour supprimer le film
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             // $conn = connect();
-                            $movieId = $_POST['movieId'];
 
                             if (isset($_POST['delete'])) {
+                                $movieId = $_POST['movieId'];
+
                                 $stmt = $conn->prepare("DELETE FROM Film WHERE id_film = ?");
                                 $stmt->bind_param("i", $movieId);
 
@@ -85,6 +88,9 @@
 
                                 $stmt->close();
                             } elseif (isset($_POST['validate'])) {
+
+                                $movieId = $_POST['movieId'];
+
                                 $stmt = $conn->prepare("UPDATE Film SET valide = 1 WHERE id_film = ?");
                                 $stmt->bind_param("i", $movieId);
 
@@ -99,8 +105,10 @@
 
                             // $conn->close();
                         }
-
                         
+
+
+                        $conn = connect();
                         $q = $conn->query('SELECT * FROM `film` WHERE valide=0;'); 
                         foreach ($q as $film) { ?>
                             <div class="fixedHeightWidthCard">
