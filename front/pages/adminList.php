@@ -36,7 +36,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <a class="dropdown-item" href="./adminList.php">List Movies</a>
                       <a class="dropdown-item" href="./adminModifyAdd.html">Add Movies</a>
-                      <a class="dropdown-item" href="./adminListVote.html">List Vote</a>
+                      <a class="dropdown-item" href="./adminListVote.php">List Vote</a>
                     </div>
                 </div>
 
@@ -128,7 +128,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title"><?= $film['titre'];?></h5>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
+                                            <div class="btn-group m-auto">
                                                 <form method="POST" action="">
                                                     <input type="hidden" name="movieId" value="<?= $film['id_film']; ?>">
                                                     <button type="submit" name="validate" class="btn btnRedBody mt-auto mb-auto mr-2">Validate</button>
@@ -168,7 +168,10 @@
                                         <h5 class="card-title"><?= $film['titre'];?></h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btnRedBody mr-2 mt-auto mb-auto">Edit</button>
+                                                <button type="button" class="btn btnRedBody mr-2 mt-auto mb-auto">
+                                                    <a href="edit_movie.php?movieId=<?= $film['id_film']; ?>" class="text-white">Edit</a>
+                                                </button>
+
                                                 <form method="POST" action="">
                                                     <input type="hidden" name="movieId" value="<?= $film['id_film']; ?>">
                                                     <button type="submit" name="delete" class="btn btnRedBody mt-auto mb-auto">Delete</button>

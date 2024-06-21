@@ -36,7 +36,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <a class="dropdown-item" href="./adminList.php">List Movies</a>
                       <a class="dropdown-item" href="./adminModifyAdd.html">Add Movies</a>
-                      <a class="dropdown-item" href="./adminListVote.html">List Vote</a>
+                      <a class="dropdown-item" href="./adminListVote.php">List Vote</a>
 
                       <!-- <a class="dropdown-item" href="#">Something else here</a> -->
                     </div>
@@ -65,69 +65,36 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                   
-                    <div class="ms-3">
-                     
-                      <p class=" mb-0">john.doe@gmail.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="fw-normal mb-1">title</p>
-               
-                </td>
-                <td class="backdropFilterBr">
-                    <img src="../assets/likeblue.png" class="vote-icon-liste" alt="Upvote">
+              <?php 
+                include "../php/conexionAndClose.php";
+                $conn = connect();
+                
+                $q = $conn->query('SELECT vote.mail, film.titre, vote.vote FROM `user` INNER JOIN vote ON user.mail=vote.mail INNER JOIN film ON vote.id_film=film.id_film;'); 
+                
+                foreach ($q as $vote) { ?>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="mb-0"><?= htmlspecialchars($vote['mail']); ?></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1"><?= htmlspecialchars($vote['titre']); ?></p>
+                        </td>
+                        <td class="backdropFilterBr">
+                            <?php if ($vote['vote'] == 1) { ?>
+                                <img src="../assets/likeblue.png" class="vote-icon-liste" alt="Upvote">
+                            <?php } else{ ?>
+                                <img src="../assets/dislikered.png" class="vote-icon-liste" alt="Downvote">
+                            <?php } ?>
+                        </td>
+                    </tr>
+                <?php } 
+                $conn->close();
 
-                    
-                </td>
-               
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    
-                    <div class="ms-3">
-                     
-                      <p class=" mb-0">alex.ray@gmail.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="fw-normal mb-1">title</p>
-                 
-                </td>
-                <td class="backdropFilterBr">
-                    <img src="../assets/dislikered.png" class="vote-icon-liste" alt="Downvote" >
-                </td>
-                
-               
-               
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    
-                    <div class="ms-3">
-                      
-                      <p class="mb-0">kate.hunington@gmail.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="fw-normal mb-1">title</p>
-                  
-                </td>
-                <td class="backdropFilterBr">
-                    <img src="../assets/likeblue.png" class="vote-icon-liste" alt="Upvote">
-                  
-                </td>
-                
-                
-              </tr>
+                ?>
             </tbody>
           </table>
         

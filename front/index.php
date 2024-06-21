@@ -39,7 +39,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
                           <a class="dropdown-item" href="./pages/adminModifyAdd.html">Add Movies</a>
-                          <a class="dropdown-item" href="./pages/adminListVote.html">List Vote</a>
+                          <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
                         </div>
                     </div>
                 </div>
@@ -81,15 +81,19 @@
                     include "./php/conexionAndClose.php";
                     $conn = connect();
                     
-                    $q = $conn->query('SELECT * FROM film LIMIT 50'); 
+                    $q = $conn->query('SELECT * FROM `film` WHERE valide=1 LIMIT 50;'); 
                     foreach ($q  as  $film){ ?>
                     
-                            <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre'];?>">
+                            <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre']; ?>" data-movie-genre="<?= $film['genre']; ?>">
                                 <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
                                     <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
                                     <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
+                                </div>
+                                <div class="resume">
+                                    <p>Summary :</p>
+                                    <p><?= $film['resumer'];?></p>
                                 </div>
                             </div>
                         
@@ -126,6 +130,8 @@
             <div class="ligneFlex pb-1">
                 <canvas id="myChart1" style="width:100%;max-width:700px" class="bg-light border rounded mb-3"></canvas>
                 <canvas id="myChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3"></canvas>
+                <canvas id="marksChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3"></canvas>
+
             </div>
         </section>
     </main>
@@ -138,6 +144,57 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     
     <script>
+
+    fetch('./php/getVotedMovies.php')
+        .then(response => response.json())
+        .then(data => {
+            var marksCanvas = document.getElementById("marksChart");
+
+            var movies = data.map(item => item.title);
+            var countLike = data.map(item => item.count_like);
+            var countDislike = data.map(item => item.count_dislike);
+
+            var marksData = {
+                labels: movies,
+                datasets: [{
+                    label: "Positive Votes",
+                    backgroundColor: "rgba(24,19,48,0.3)",
+                    data: countLike
+                }, {
+                    label: "Dislike Votes",
+                    backgroundColor: "rgba(217,65,116,0.3)",
+                    data: countDislike
+                }]
+            };
+
+            var radarChart = new Chart(marksCanvas, {
+                type: 'radar',
+                data: marksData,
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            stepSize: 2
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Movie Votes (Likes vs Dislikes)',
+                        // fontSize: 18,
+                        fontColor: '#333' // Optional: specify font color
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+
+
+
+
+
         // First Charts
         document.addEventListener('DOMContentLoaded', function() {
             fetchTopVotedMovies();
@@ -145,13 +202,15 @@
 
         function fetchTopVotedMovies() {
             $.ajax({
-                url: './php/getTopVotedMovies.php', // PHP file to fetch top voted movies
+                url: './php/getTopVotedMovies.php', 
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     const xValues = data.map(movie => movie.titre);
                     const yValues = data.map(movie => movie.total_votes);
-                    const barColors = "#D94174";
+
+                    
+                    const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
 
                     new Chart("myChart1", {
                         type: "bar",
@@ -184,37 +243,50 @@
             });
         }
 
-        // Second Chart
-        var xValues = ["Action", "Adventure", "Drama", "Independant", "Thriller"];
-        var yValues = [55, 49, 44, 24, 15];
-        var barColors = [
-            "#b91d47",
-            "#00aba9",
-            "#2b5797",
-            "#e8c3b9",
-            "#1e7145"
-        ];
 
-        new Chart("myChart", {
-            type: "pie",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: "Voted Movie Genre"
+        // Second Chart
+        // function generateRandomColors(numColors) {
+        //     const colors = [];
+        //     for (let i = 0; i < numColors; i++) {
+        //         const color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+        //         colors.push(color);
+        //     }
+        //     return colors;
+        // }
+        fetch('./php/data_genre.php')
+        .then(response => response.json())
+        .then(data => {
+            var xValues = data.map(item => item.genre);
+            var yValues = data.map(item => item.total_votes_genre);
+
+            // var barColors = generateRandomColors(xValues.length);
+            // const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
+
+            const colors = ['#D94174', '#181330', '#FFDE17'];
+            const barColors = xValues.map((_, index) => colors[index % colors.length]);
+
+
+            new Chart("myChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Voted Movie Genre"
+                    }
                 }
-            }
+            });
         });
 
         document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
-            addVoteListeners(); // Ensure listeners are added on initial load
+            addVoteListeners(); 
         });
     
         function fetchRandomMovies() {
@@ -260,7 +332,8 @@
                 success: function (data) {
                     const movies = data.results.map(movie => ({
                         id: movie.id,
-                        title: movie.title
+                        title: movie.title,
+                        summary: movie.overview
                     }));
                     displayMovies(movies, '#movie-posters');
                 },
@@ -273,6 +346,7 @@
         function displayMovies(movies, containerSelector) {
             const moviePostersContainer = $(containerSelector);
             moviePostersContainer.empty();
+            
             movies.forEach(movie => {
                 $.ajax({
                     url: `https://api.themoviedb.org/3/movie/${movie.id}`,
@@ -283,18 +357,29 @@
                     success: function (movieDetails) {
                         const posterPath = movieDetails.poster_path;
                         const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../front/assets/placeholder.jpg';
-                        const genres = movieDetails.genres.map(genre => genre.name).join(', ');
+                        
+                        let firstGenre = 'Genre Not Available';
+                        if (movieDetails.genres.length > 0) {
+                            firstGenre = movieDetails.genres[0].name;
+                        }
+                        
                         const moviePosterCard = $('<div>').addClass('movie-poster-card')
-                                                         .attr('data-movie-id', movieDetails.id)
-                                                         .attr('data-movie-title', movieDetails.title)
-                                                         .attr('data-movie-genre', genres);
-                                                         
+                                                        .attr('data-movie-id', movieDetails.id)
+                                                        .attr('data-movie-title', movieDetails.title)
+                                                        .attr('data-movie-genre', firstGenre)
+                                                        .attr('data-movie-summary', movieDetails.overview);
+                                                        
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
                             .append($('<img>').attr('src', './assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote'))
                             .append($('<img>').attr('src', './assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
-                        moviePosterCard.append(posterImg, movieTitle, voteIcons);
+                        
+                        const summary = $('<div>').addClass('resume')
+                            .append($('<p>').text("Summary:"))
+                            .append($('<p>').text(movieDetails.overview)).addClass('resumeContent');
+
+                        moviePosterCard.append(posterImg, movieTitle, voteIcons, summary);
                         moviePostersContainer.append(moviePosterCard);
                         addVoteListeners(); // Add listeners after each movie card is appended
                     },
@@ -302,6 +387,7 @@
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
                         const posterImg = $('<img>').attr('src', './assets/placeholder.jpg').attr('alt', 'No Poster Available');
                         const errorMsg = $('<p>').text(movie.title);
+                        
                         moviePosterCard.append(posterImg, errorMsg);
                         moviePostersContainer.append(moviePosterCard);
                     }
@@ -314,6 +400,7 @@
             }
         }
 
+
         let searchResultsAdded = false;
         $('#search-results-section').hide(); 
 
@@ -324,17 +411,22 @@
                 const movieTitle = movieCard.data('movie-title'); // Titre du film
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
+                const movieSummary = movieCard.data('movie-summary');
+
+
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
-                const userEmail = 'user3@example.com'; // Replace this with actual user email
+                const userEmail = 'user1@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
                     movieTitle: movieTitle,
                     movieGenre: movieGenre,
                     movieImgSrc: movieImgSrc,
+                    valide: 1, // because u don't need to validate a movie already present in the api 
+                    movieSummary: movieSummary,
+
                     vote: voteValue, // +1 for upvote, -1 for downvote
-                    mail: userEmail,
-                    valide: true // Assumons que valide est toujours vrai pour ce scénario
+                    mail: userEmail
                 };
 
                 $.ajax({

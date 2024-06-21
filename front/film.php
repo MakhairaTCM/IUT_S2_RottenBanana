@@ -9,6 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $movieGenre = $_POST['movieGenre'];
     $movieImgSrc = $_POST['movieImgSrc'];
     $valide = $_POST['valide'];
+    $movieSummary = $_POST['movieSummary'];
+
 
     $vote = $_POST['vote']; // +1 for upvote, -1 for downvote
     $mail = $_POST['mail']; // Email of the user
@@ -24,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Film with ID $movieId already exists in the database. Skipping insert.";
     } else {
         // Movie does not exist in Film table, insert new record
-        $stmt = $conn->prepare("INSERT INTO Film (id_film, titre, genre, url_poster, valide) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssi", $movieId, $movieTitle, $movieGenre, $movieImgSrc, $valide);
+        $stmt = $conn->prepare("INSERT INTO Film (id_film, titre, genre, url_poster, resumer, valide) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("issssi", $movieId, $movieTitle, $movieGenre, $movieImgSrc, $movieSummary, $valide);
         if ($stmt->execute()) {
             echo "Film record created successfully.";
         } else {

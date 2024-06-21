@@ -1,3 +1,19 @@
+<?php
+include "../php/conexionAndClose.php";
+$conn = connect();
+
+if (isset($_GET['movieId'])) {
+    $movieId = $_GET['movieId'];
+    $stmt = $conn->prepare("SELECT * FROM Film WHERE id_film = ?");
+    $stmt->bind_param("i", $movieId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $film = $result->fetch_assoc();
+    $stmt->close();
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,34 +62,33 @@
         <section class="container mt-5">
             <h2 class="text-center">Add or Modify a Movie</h2>
             <form action="../php/add_movie.php" method="POST">
-              <div class="form-group">
-                  <label for="movieTitle">Movie Title</label>
-                  <input type="text" class="form-control" id="movieTitle" name="movieTitle" placeholder="Enter movie title" required>
-              </div>
-              <div class="form-group">
-                  <label for="movieImgSrc">Movie Poster URL</label>
-                  <input type="text" class="form-control" id="movieImgSrc" name="movieImgSrc" placeholder="Enter movie poster URL" required>
-              </div>
-              <div class="form-group">
-                <label for="movieSummary">Movie Summary</label>
-                <textarea class="form-control" id="movieSummary" name="movieSummary" placeholder="Enter Summary here" rows="5" required></textarea>
-
-              </div>
-              <div class="form-group">
-                  <label for="movieGenre">Movie Genre</label>
-                  <select class="form-control" id="movieGenre" name="movieGenre" required>
-                      <option value="Action">Action</option>
-                      <option value="Comedy">Comedy</option>
-                      <option value="Drama">Drama</option>
-                      <option value="Horror">Horror</option>
-                      <option value="Romance">Romance</option>
-                      <option value="Sci-Fi">Sci-Fi</option>
-                      <option value="Thriller">Thriller</option>
-                  </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Add Movie</button>
+                <input type="hidden" name="movieId" value="<?= $film['id_film']; ?>">
+                <div class="form-group">
+                    <label for="movieTitle">Movie Title</label>
+                    <input type="text" class="form-control" id="movieTitle" name="movieTitle" placeholder="Enter movie title" value="<?= $film['titre']; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="movieImgSrc">Movie Poster URL</label>
+                    <input type="text" class="form-control" id="movieImgSrc" name="movieImgSrc" placeholder="Enter movie poster URL" value="<?= $film['url_poster']; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="movieSummary">Movie Summary</label>
+                    <textarea class="form-control" id="movieSummary" name="movieSummary" placeholder="Enter Summary here" rows="5" required><?= $film['resumer']; ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="movieGenre">Movie Genre</label>
+                    <select class="form-control" id="movieGenre" name="movieGenre" required>
+                        <option value="Action" <?= $film['genre'] == 'Action' ? 'selected' : ''; ?>>Action</option>
+                        <option value="Comedy" <?= $film['genre'] == 'Comedy' ? 'selected' : ''; ?>>Comedy</option>
+                        <option value="Drama" <?= $film['genre'] == 'Drama' ? 'selected' : ''; ?>>Drama</option>
+                        <option value="Horror" <?= $film['genre'] == 'Horror' ? 'selected' : ''; ?>>Horror</option>
+                        <option value="Romance" <?= $film['genre'] == 'Romance' ? 'selected' : ''; ?>>Romance</option>
+                        <option value="Sci-Fi" <?= $film['genre'] == 'Sci-Fi' ? 'selected' : ''; ?>>Sci-Fi</option>
+                        <option value="Thriller" <?= $film['genre'] == 'Thriller' ? 'selected' : ''; ?>>Thriller</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Movie</button>
             </form>
-          
         </section>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
