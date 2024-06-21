@@ -1,19 +1,45 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database";
+$showLoginError = false;
 
-// Crée la connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  include("../php/connectAndClose.php");
 
-// Vérifie la connexion
-if($conn) { 
-    echo "success";  
-}  
-else { 
-    die("Error". mysqli_connect_error());  
-}  
+  $email = $_POST["loginEmail"];
+  $password = $_POST["loginPassword"];
+
+  echo "<script>console.log('email is $email')</script>";
+  echo "<script>console.log('passw is $password')</script>";
+
+  $sql = "SELECT * FROM user WHERE mail='".$email."';";
+  $result = mysqli_query($conn, $sql); 
+  $num = mysqli_num_rows($result);  
+
+  if ($num > 0) {
+    echo "<script>console.log('email is good');</script>";
+
+    $sql = "SELECT PASSWORD FROM user WHERE mail='".$email."';";
+    $result = mysqli_query($conn, $sql); 
+    $row = mysqli_fetch_array($result);
+
+    $hash = "0";
+    if ($row) {$hash = $row[0];}
+    $check = password_verify("$password", "$hash");
+
+    if ($check) {
+      echo "<script>console.log('everything is good, connected');</script>";
+      header("Location: ../index.php");
+    }
+
+    else {
+      echo "<script>console.log('wrong password');</script>";
+      $showLoginError = true;
+    }
+  }
+  else {
+    echo "<script>console.log('email is wrong');</script>";
+    $showLoginError = true;
+  }
+}
 ?>
 
 <html lang="fr">
@@ -35,7 +61,7 @@ else {
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
               <a class="navbar-brand" href="../index.php"><img src="../assets/banana.png" alt="" width="28"></a>
-              <a href="../index.php" class="mt-auto mb-auto text-decoration-none mr-3">
+              <a href="../index.html" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
               </a>
 
@@ -55,18 +81,25 @@ else {
             </div>
           </nav>
     </header>
-   
-    <div class="container col-md-6 mt-4">
+
+    <?php 
+    if($showLoginError) {
+
+        echo '<div class="container-fluid row justify-content-center"><div class="alert alert-danger justify-content-center col-3 mt-4">Email or password is incorrect</div></div>';
+      }
+    ?>
+
+    <div class="container col-md-5 mt-4">
         <div class="col-md-12 mb-4">
-            <h2>Log In</h2>
-            <form id="signupForm">
+            <h2 class="text-center mb-2">Log In</h2>
+            <form id="loginForm" action="login.php" method="post">
                 <div class="form-group">
-                    <label for="signupEmail">Email</label>
-                    <input type="email" class="form-control" id="signupEmail" name="signupEmail" required>
+                    <label for="loginEmail">Email</label>
+                    <input type="email" class="form-control" id="loginEmail" name="loginEmail" required>
                 </div>
                 <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <input type="password" class="form-control" id="signupPassword" name="signupPassword" required>
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" name="loginPassword" required>
                 </div>
                 <button type="submit" class="btn bg-third text-second btn-block">Log In</button>
             </form>

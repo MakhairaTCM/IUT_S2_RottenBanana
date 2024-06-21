@@ -20,7 +20,7 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
               <a class="navbar-brand" href="./index.php">
-                <img src="./assets/banana.png" alt="a rotten banana" width="28">
+                <img src="./assets/banana.png" alt="logo of the website : a rotten banana" width="28">
               </a>
               <a href="./index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
@@ -39,7 +39,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
                           <a class="dropdown-item" href="./pages/adminModifyAdd.html">Add Movies</a>
-                          <a class="dropdown-item" href="./pages/adminListVote.html">List Vote</a>
+                          <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
                         </div>
                     </div>
                 </div>
@@ -81,21 +81,25 @@
                     include "./php/conexionAndClose.php";
                     $conn = connect();
                     
-                    $q = $conn->query('SELECT * FROM film LIMIT 50'); 
+                    $q = $conn->query('SELECT * FROM `film` WHERE valide=1 LIMIT 50;'); 
                     foreach ($q  as  $film){ ?>
                     
-                            <div class="movie-poster-card" data-movie-id="1" data-movie-title="<?= $film['titre'];?>">
-                                <img src="<?= $film['url_poster'];?>" alt="Placeholder Image" class="movieImg">
+                            <div class="movie-poster-card" data-movie-id="<?= $film['id_film'];?>" data-movie-title="<?= $film['titre']; ?>" data-movie-genre="<?= $film['genre']; ?>">
+                                <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
                                     <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
                                     <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
                                 </div>
+                                <div class="resume">
+                                    <p>Summary :</p>
+                                    <p><?= $film['resumer'];?></p>
+                                </div>
                             </div>
                         
 
                         <?php } 
-                            $conn->close();
+                            // $conn->close();
 
                             ?>
             </div>
@@ -104,39 +108,30 @@
         <section class="mb-5">
             <h2>Ranking</h2>
             <div id="movie-posters-ranking" class="pb-2">
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">1er</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 1</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">2ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 2</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">3ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 3</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">4ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 4</p>
-                </div>
-                <div class="movie-poster-card-ranking">
-                    <div class="ranking-badge">5ème</div>
-                    <img src="./assets/placeholder.jpg" alt="Placeholder Image" class="movieImg">
-                    <p>titre 5</p>
-                </div>
-               
+                <?php 
+                    $q = $conn->query('SELECT film.titre, film.genre, film.url_poster, film.id_film, SUM(vote.vote) AS total_votes FROM film INNER JOIN vote ON film.id_film = vote.id_film GROUP BY film.id_film, film.titre, film.genre, film.url_poster ORDER BY total_votes DESC LIMIT 20;'); 
+                    $films = $q->fetch_all(MYSQLI_ASSOC); // Fetch all results into an associative array
+                    for ($i = 0; $i < count($films); $i++) {
+                        $film = $films[$i];
+                ?>
+                        <div class="movie-poster-card-ranking">
+                            <div class="ranking-badge"><?= $i+1; ?></div>
+                            <img src="<?= $film['url_poster']; ?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
+                            <p><?= $film['titre']; ?></p>
+                        </div>
+                <?php 
+                    } 
+                    $conn->close();
+                ?>
             </div>
         </section>
-        <section class="mb-5">
+                <section class="mb-5">
             <h2>Results Charts</h2>
             <div class="ligneFlex pb-1">
                 <canvas id="myChart1" style="width:100%;max-width:700px" class="bg-light border rounded mb-3"></canvas>
                 <canvas id="myChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3"></canvas>
+                <canvas id="marksChart" style="width:100%;max-width:600px" class="bg-light border rounded ml-3 mb-3"></canvas>
+
             </div>
         </section>
     </main>
@@ -149,60 +144,149 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     
     <script>
-        // First Charts
-        var xValues = ["Most Popular Movie", "Hot Movie", "Movie...", "...", "..."];
-        var yValues = [55, 49, 44, 24, 15];
-        var barColors =  "#D94174";
 
-        new Chart("myChart1", {
-            type: "bar",
-            data: {
-                labels: xValues,
+    fetch('./php/getVotedMovies.php')
+        .then(response => response.json())
+        .then(data => {
+            var marksCanvas = document.getElementById("marksChart");
+
+            var movies = data.map(item => item.title);
+            var countLike = data.map(item => item.count_like);
+            var countDislike = data.map(item => item.count_dislike);
+
+            var marksData = {
+                labels: movies,
                 datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
+                    label: "Positive Votes",
+                    backgroundColor: "rgba(24,19,48,0.3)",
+                    data: countLike
+                }, {
+                    label: "Dislike Votes",
+                    backgroundColor: "rgba(217,65,116,0.3)",
+                    data: countDislike
                 }]
-            },
-            options: {
-                legend: {display: false},
-                title: {
-                    display: true,
-                    text: "Most Popular Movie"
+            };
+
+            var radarChart = new Chart(marksCanvas, {
+                type: 'radar',
+                data: marksData,
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            stepSize: 2
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Movie Votes (Likes vs Dislikes)',
+                        // fontSize: 18,
+                        fontColor: '#333' // Optional: specify font color
+                    }
                 }
-            }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
         });
 
-        // Second Chart
-        var xValues = ["Action", "Adventure", "Drama", "Independant", "Thriller"];
-        var yValues = [55, 49, 44, 24, 15];
-        var barColors = [
-            "#b91d47",
-            "#00aba9",
-            "#2b5797",
-            "#e8c3b9",
-            "#1e7145"
-        ];
 
-        new Chart("myChart", {
-            type: "pie",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: "Voted Movie Genre"
+
+
+
+        // First Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTopVotedMovies();
+        });
+
+        function fetchTopVotedMovies() {
+            $.ajax({
+                url: './php/getTopVotedMovies.php', 
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    const xValues = data.map(movie => movie.titre);
+                    const yValues = data.map(movie => movie.total_votes);
+
+                    
+                    const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
+
+                    new Chart("myChart1", {
+                        type: "bar",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true 
+                                    }
+                                }]
+                            },
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: "Most Popular Movies"
+                            }
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching top voted movies:', error);
                 }
-            }
+            });
+        }
+
+
+        // Second Chart
+        // function generateRandomColors(numColors) {
+        //     const colors = [];
+        //     for (let i = 0; i < numColors; i++) {
+        //         const color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+        //         colors.push(color);
+        //     }
+        //     return colors;
+        // }
+        fetch('./php/data_genre.php')
+        .then(response => response.json())
+        .then(data => {
+            var xValues = data.map(item => item.genre);
+            var yValues = data.map(item => item.total_votes_genre);
+
+            // var barColors = generateRandomColors(xValues.length);
+            // const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
+
+            const colors = ['#D94174', '#181330', '#FFDE17'];
+            const barColors = xValues.map((_, index) => colors[index % colors.length]);
+
+
+            new Chart("myChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Voted Movie Genre"
+                    }
+                }
+            });
         });
 
         document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
-            addVoteListeners(); // Ensure listeners are added on initial load
+            addVoteListeners(); 
         });
     
         function fetchRandomMovies() {
@@ -248,7 +332,8 @@
                 success: function (data) {
                     const movies = data.results.map(movie => ({
                         id: movie.id,
-                        title: movie.title
+                        title: movie.title,
+                        summary: movie.overview
                     }));
                     displayMovies(movies, '#movie-posters');
                 },
@@ -261,6 +346,7 @@
         function displayMovies(movies, containerSelector) {
             const moviePostersContainer = $(containerSelector);
             moviePostersContainer.empty();
+            
             movies.forEach(movie => {
                 $.ajax({
                     url: `https://api.themoviedb.org/3/movie/${movie.id}`,
@@ -271,18 +357,29 @@
                     success: function (movieDetails) {
                         const posterPath = movieDetails.poster_path;
                         const posterUrl = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '../front/assets/placeholder.jpg';
-                        const genres = movieDetails.genres.map(genre => genre.name).join(', ');
+                        
+                        let firstGenre = 'Genre Not Available';
+                        if (movieDetails.genres.length > 0) {
+                            firstGenre = movieDetails.genres[0].name;
+                        }
+                        
                         const moviePosterCard = $('<div>').addClass('movie-poster-card')
-                                                         .attr('data-movie-id', movieDetails.id)
-                                                         .attr('data-movie-title', movieDetails.title)
-                                                         .attr('data-movie-genre', genres);
-                                                         
+                                                        .attr('data-movie-id', movieDetails.id)
+                                                        .attr('data-movie-title', movieDetails.title)
+                                                        .attr('data-movie-genre', firstGenre)
+                                                        .attr('data-movie-summary', movieDetails.overview);
+                                                        
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
                             .append($('<img>').attr('src', './assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote'))
                             .append($('<img>').attr('src', './assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
-                        moviePosterCard.append(posterImg, movieTitle, voteIcons);
+                        
+                        const summary = $('<div>').addClass('resume')
+                            .append($('<p>').text("Summary:"))
+                            .append($('<p>').text(movieDetails.overview)).addClass('resumeContent');
+
+                        moviePosterCard.append(posterImg, movieTitle, voteIcons, summary);
                         moviePostersContainer.append(moviePosterCard);
                         addVoteListeners(); // Add listeners after each movie card is appended
                     },
@@ -290,6 +387,7 @@
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
                         const posterImg = $('<img>').attr('src', './assets/placeholder.jpg').attr('alt', 'No Poster Available');
                         const errorMsg = $('<p>').text(movie.title);
+                        
                         moviePosterCard.append(posterImg, errorMsg);
                         moviePostersContainer.append(moviePosterCard);
                     }
@@ -302,6 +400,7 @@
             }
         }
 
+
         let searchResultsAdded = false;
         $('#search-results-section').hide(); 
 
@@ -312,13 +411,22 @@
                 const movieTitle = movieCard.data('movie-title'); // Titre du film
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
+                const movieSummary = movieCard.data('movie-summary');
+
+
+                const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
+                const userEmail = 'user1@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
                     movieTitle: movieTitle,
                     movieGenre: movieGenre,
                     movieImgSrc: movieImgSrc,
-                    valide: true // Assumons que valide est toujours vrai pour ce scénario
+                    valide: 1, // because u don't need to validate a movie already present in the api 
+                    movieSummary: movieSummary,
+
+                    vote: voteValue, // +1 for upvote, -1 for downvote
+                    mail: userEmail
                 };
 
                 $.ajax({
@@ -334,6 +442,8 @@
                 });
             });
         }
+
+
 
 
 
