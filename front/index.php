@@ -88,8 +88,8 @@
                                 <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
-                                    <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
-                                    <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
+                                    <img src="./assets/like.png" class="vote-icon" alt="Upvote">
+                                    <img src="./assets/dislike.png" class="vote-icon" alt="Downvote">
                                 </div>
                                 <div class="resume">
                                     <p>Summary :</p>
@@ -144,13 +144,58 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="./js/charts.js"></script>
     
+  
+    
     <script>
-
         document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
-            addVoteListeners(); 
+            fetchUserVotes(); // Fetch user votes on page load
+
+            $('#search-results-section').hide(); // Initially hide the search results section
+
+            $('#input-movie').on('input', function () {
+                const query = $(this).val();
+                if (query.length >= 2) {
+                    searchMovies(query);
+                } else {
+                    $('#movie-posters').empty(); 
+                    $('#search-results-section').hide(); 
+                    searchResultsAdded = false;  
+                }
+            });
         });
-    
+
+        let userVotes = {};
+
+        function fetchUserVotes() {
+            $.ajax({
+                url: './php/getUserVotes.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    userVotes = response;
+                    updateVoteIcons(); // Update vote icons once user votes are fetched
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching user votes:', textStatus, errorThrown);
+                }
+            });
+        }
+
+        function updateVoteIcons() {
+            $('.movie-poster-card').each(function() {
+                const movieId = $(this).data('movie-id');
+                if (userVotes[movieId] !== undefined) {
+                    const voteValue = userVotes[movieId];
+                    if (voteValue === 1) {
+                        $(this).find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue.png');
+                    } else if (voteValue === -1) {
+                        $(this).find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered.png');
+                    }
+                }
+            });
+        }
+
         function fetchRandomMovies() {
             $.ajax({
                 url: "https://api.themoviedb.org/3/movie/popular",
@@ -169,20 +214,7 @@
                 }
             });
         }
-    
-        document.addEventListener('DOMContentLoaded', () => {
-            $('#input-movie').on('input', function () {
-                const query = $(this).val();
-                if (query.length >= 2) {
-                    searchMovies(query);
-                } else {
-                    $('#movie-posters').empty(); 
-                    $('#search-results-section').hide(); 
-                    searchResultsAdded = false;  
-                }
-            });
-        });
-    
+
         function searchMovies(query) {
             $.ajax({
                 url: "https://api.themoviedb.org/3/search/movie",
@@ -198,13 +230,15 @@
                         summary: movie.overview
                     }));
                     displayMovies(movies, '#movie-posters');
+                    $('#search-results-section').show(); // Show search results section
                 },
                 error: function() {
                     $('#movie-posters').html(`<p>Sorry, no movies found.</p>`);
+                    $('#search-results-section').hide(); // Hide search results section on error
                 }
             });
         }
-    
+
         function displayMovies(movies, containerSelector) {
             const moviePostersContainer = $(containerSelector);
             moviePostersContainer.empty();
@@ -234,8 +268,8 @@
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
-                            .append($('<img>').attr('src', './assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote'))
-                            .append($('<img>').attr('src', './assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
+                            .append($('<img>').attr('src', './assets/like.png').addClass('vote-icon').attr('alt', 'Upvote'))
+                            .append($('<img>').attr('src', './assets/dislike.png').addClass('vote-icon').attr('alt', 'Downvote'));
                         
                         const summary = $('<div>').addClass('resume')
                             .append($('<p>').text("Summary:"))
@@ -243,6 +277,7 @@
 
                         moviePosterCard.append(posterImg, movieTitle, voteIcons, summary);
                         moviePostersContainer.append(moviePosterCard);
+                        updateVoteIcons(); // Update vote icons for the newly added movie cards
                         addVoteListeners(); // Add listeners after each movie card is appended
                     },
                     error: function() {
@@ -262,10 +297,6 @@
             }
         }
 
-
-        let searchResultsAdded = false;
-        $('#search-results-section').hide(); 
-
         function addVoteListeners() {
             $(document).off('click', '.vote-icon').on('click', '.vote-icon', function() {
                 const movieCard = $(this).closest('.movie-poster-card');
@@ -274,7 +305,6 @@
                 const movieGenre = movieCard.data('movie-genre'); // Genre du film
                 const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
                 const movieSummary = movieCard.data('movie-summary');
-
 
                 const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
                 const userEmail = 'user1@example.com'; // Replace this with actual user email
@@ -286,7 +316,6 @@
                     movieImgSrc: movieImgSrc,
                     valide: 1, // because u don't need to validate a movie already present in the api 
                     movieSummary: movieSummary,
-
                     vote: voteValue, // +1 for upvote, -1 for downvote
                     mail: userEmail
                 };
@@ -296,7 +325,8 @@
                     type: 'POST',
                     data: movieData,
                     success: function(response) {
-                        console.log(response);
+                        console.log("vote sent");
+                        updateVoteIcon(movieCard, voteValue);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error('Error:', textStatus, errorThrown);
@@ -305,11 +335,17 @@
             });
         }
 
+        function updateVoteIcon(movieCard, voteValue) {
+            if (voteValue === 1) {
+                movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue.png');
+                movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislike.png'); // reset the downvote icon
+            } else if (voteValue === -1) {
+                movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/like.png'); // reset the upvote icon
+                movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered.png');
+            }
+        }
 
 
-
-
-        
     </script>
 </body>
 </html>
