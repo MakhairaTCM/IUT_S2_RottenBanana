@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $valide = $_POST['valide'];
     $movieSummary = $_POST['movieSummary'];
 
-
     $vote = $_POST['vote']; // +1 for upvote, -1 for downvote
     $mail = $_POST['mail']; // Email of the user
 
@@ -39,23 +38,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt_check->close();
 
     // Check if vote record already exists
-    $stmt_check_vote = $conn->prepare("SELECT * FROM vote WHERE mail = ? AND id_film = ?");
+    $stmt_check_vote = $conn->prepare("SELECT vote FROM vote WHERE mail = ? AND id_film = ?");
     $stmt_check_vote->bind_param("si", $mail, $movieId);
     $stmt_check_vote->execute();
     $stmt_check_vote->store_result();
 
     if ($stmt_check_vote->num_rows > 0) {
-        // Vote already exists, update the record
-        $stmt_update_vote = $conn->prepare("UPDATE vote SET vote = ? WHERE mail = ? AND id_film = ?");
-        $stmt_update_vote->bind_param("isi", $vote, $mail, $movieId);
+        // Fetch existing vote value
+        $stmt_check_vote->bind_result($existingVote);
+        $stmt_check_vote->fetch();
 
-        if ($stmt_update_vote->execute()) {
-            echo "Vote record updated successfully.";
+        if ($existingVote == $vote) {
+            // Vote is the same, delete the vote
+            $stmt_delete_vote = $conn->prepare("DELETE FROM vote WHERE mail = ? AND id_film = ?");
+            $stmt_delete_vote->bind_param("si", $mail, $movieId);
+
+            if ($stmt_delete_vote->execute()) {
+                echo "Vote record deleted successfully.";
+            } else {
+                echo "Error: " . $stmt_delete_vote->error;
+            }
+
+            $stmt_delete_vote->close();
         } else {
-            echo "Error: " . $stmt_update_vote->error;
-        }
+            // Vote is different, update the record
+            $stmt_update_vote = $conn->prepare("UPDATE vote SET vote = ? WHERE mail = ? AND id_film = ?");
+            $stmt_update_vote->bind_param("isi", $vote, $mail, $movieId);
 
-        $stmt_update_vote->close();
+            if ($stmt_update_vote->execute()) {
+                echo "Vote record updated successfully.";
+            } else {
+                echo "Error: " . $stmt_update_vote->error;
+            }
+
+            $stmt_update_vote->close();
+        }
     } else {
         // Insert new vote record
         $stmt_vote = $conn->prepare("INSERT INTO vote (mail, id_film, vote) VALUES (?, ?, ?)");
