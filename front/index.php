@@ -88,8 +88,8 @@
                                 <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
-                                    <img src="./assets/like.png" class="vote-icon" alt="Upvote">
-                                    <img src="./assets/dislikE.png" class="vote-icon" alt="Downvote">
+                                    <img src="./assets/likeblue.png" class="vote-icon" alt="Upvote">
+                                    <img src="./assets/dislikered.png" class="vote-icon" alt="Downvote">
                                 </div>
                                 <div class="resume">
                                     <p>Summary :</p>
@@ -142,147 +142,9 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="./js/charts.js"></script>
     
     <script>
-
-    fetch('./php/getVotedMovies.php')
-        .then(response => response.json())
-        .then(data => {
-            var marksCanvas = document.getElementById("marksChart");
-
-            var movies = data.map(item => item.title);
-            var countLike = data.map(item => item.count_like);
-            var countDislike = data.map(item => item.count_dislike);
-
-            var marksData = {
-                labels: movies,
-                datasets: [{
-                    label: "Positive Votes",
-                    backgroundColor: "rgba(24,19,48,0.3)",
-                    data: countLike
-                }, {
-                    label: "Dislike Votes",
-                    backgroundColor: "rgba(217,65,116,0.3)",
-                    data: countDislike
-                }]
-            };
-
-            var radarChart = new Chart(marksCanvas, {
-                type: 'radar',
-                data: marksData,
-                options: {
-                    scale: {
-                        ticks: {
-                            beginAtZero: true,
-                            min: 0,
-                            stepSize: 2
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Movie Votes (Likes vs Dislikes)',
-                        // fontSize: 18,
-                        fontColor: '#333' // Optional: specify font color
-                    }
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-
-
-
-
-
-        // First Charts
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchTopVotedMovies();
-        });
-
-        function fetchTopVotedMovies() {
-            $.ajax({
-                url: './php/getTopVotedMovies.php', 
-                method: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    const xValues = data.map(movie => movie.titre);
-                    const yValues = data.map(movie => movie.total_votes);
-
-                    
-                    const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
-
-                    new Chart("myChart1", {
-                        type: "bar",
-                        data: {
-                            labels: xValues,
-                            datasets: [{
-                                backgroundColor: barColors,
-                                data: yValues
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true 
-                                    }
-                                }]
-                            },
-                            legend: { display: false },
-                            title: {
-                                display: true,
-                                text: "Most Popular Movies"
-                            }
-                        }
-                    });
-                },
-                error: function(error) {
-                    console.error('Error fetching top voted movies:', error);
-                }
-            });
-        }
-
-
-        // Second Chart
-        // function generateRandomColors(numColors) {
-        //     const colors = [];
-        //     for (let i = 0; i < numColors; i++) {
-        //         const color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
-        //         colors.push(color);
-        //     }
-        //     return colors;
-        // }
-        fetch('./php/data_genre.php')
-        .then(response => response.json())
-        .then(data => {
-            var xValues = data.map(item => item.genre);
-            var yValues = data.map(item => item.total_votes_genre);
-
-            // var barColors = generateRandomColors(xValues.length);
-            // const barColors = xValues.map((_, index) => (index % 2 === 0 ? '#D94174' : '#181330'));
-
-            const colors = ['#D94174', '#181330', '#FFDE17'];
-            const barColors = xValues.map((_, index) => colors[index % colors.length]);
-
-
-            new Chart("myChart", {
-                type: "pie",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        backgroundColor: barColors,
-                        data: yValues
-                    }]
-                },
-                options: {
-                    title: {
-                        display: true,
-                        text: "Voted Movie Genre"
-                    }
-                }
-            });
-        });
 
         document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
@@ -372,8 +234,8 @@
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
-                            .append($('<img>').attr('src', './assets/like.png').addClass('vote-icon').attr('alt', 'Upvote'))
-                            .append($('<img>').attr('src', './assets/dislikE.png').addClass('vote-icon').attr('alt', 'Downvote'));
+                            .append($('<img>').attr('src', './assets/likeblue.png').addClass('vote-icon').attr('alt', 'Upvote'))
+                            .append($('<img>').attr('src', './assets/dislikered.png').addClass('vote-icon').attr('alt', 'Downvote'));
                         
                         const summary = $('<div>').addClass('resume')
                             .append($('<p>').text("Summary:"))
@@ -404,62 +266,28 @@
         let searchResultsAdded = false;
         $('#search-results-section').hide(); 
 
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchUserVotes();
-            fetchTopVotedMovies();
-            fetchRandomMovies();
-            addVoteListeners();
-        });
-
-        function fetchUserVotes() {
-            $.ajax({
-                url: './php/getUserVote.php',
-                method: 'GET',
-                dataType: 'json',
-                success: function(userVotes) {
-                    $('.movie-poster-card').each(function() {
-                        const movieId = $(this).data('movie-id');
-                        if (userVotes.hasOwnProperty(movieId)) {
-                            const vote = userVotes[movieId];
-                            if (vote == 1) {
-                                $(this).find('img[alt="Upvote"]').attr('src', './assets/likeblue.png');
-                            } else if (vote == -1) {
-                                $(this).find('img[alt="Downvote"]').attr('src', './assets/dislikered.png');
-                            }
-                        }
-                    });
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error fetching user votes:', {
-                        jqXHR: jqXHR,
-                        textStatus: textStatus,
-                        errorThrown: errorThrown
-                    });
-                }
-            });
-        }
-
-
         function addVoteListeners() {
             $(document).off('click', '.vote-icon').on('click', '.vote-icon', function() {
                 const movieCard = $(this).closest('.movie-poster-card');
-                const movieId = movieCard.data('movie-id');
-                const movieTitle = movieCard.data('movie-title');
-                const movieGenre = movieCard.data('movie-genre');
-                const movieImgSrc = movieCard.find('img.movieImg').attr('src');
+                const movieId = movieCard.data('movie-id'); // ID du film
+                const movieTitle = movieCard.data('movie-title'); // Titre du film
+                const movieGenre = movieCard.data('movie-genre'); // Genre du film
+                const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
                 const movieSummary = movieCard.data('movie-summary');
 
-                const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1;
-                const userEmail = 'user1@example.com';
+
+                const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
+                const userEmail = 'user1@example.com'; // Replace this with actual user email
 
                 const movieData = {
                     movieId: movieId,
                     movieTitle: movieTitle,
                     movieGenre: movieGenre,
                     movieImgSrc: movieImgSrc,
-                    valide: 1,
+                    valide: 1, // because u don't need to validate a movie already present in the api 
                     movieSummary: movieSummary,
-                    vote: voteValue,
+
+                    vote: voteValue, // +1 for upvote, -1 for downvote
                     mail: userEmail
                 };
 
@@ -469,43 +297,13 @@
                     data: movieData,
                     success: function(response) {
                         console.log(response);
-                        if (voteValue === 1) {
-                            toggleIcon($(this), 'upvote');
-                        } else {
-                            toggleIcon($(this), 'downvote');
-                        }
-                    }.bind(this),
+                    },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error('Error:', textStatus, errorThrown);
                     }
                 });
             });
         }
-
-        function toggleIcon(element, voteType) {
-            const upvoteIcon = element.siblings('img[alt="Upvote"]');
-            const downvoteIcon = element.siblings('img[alt="Downvote"]');
-            
-            if (voteType === 'upvote') {
-                if (element.attr('src') === './assets/like.png') {
-                    element.attr('src', './assets/likeblue.png');
-                } else {
-                    element.attr('src', './assets/like.png');
-                    downvoteIcon.attr('src', './assets/dislike.png');
-                }
-            } else if (voteType === 'downvote') {
-                if (element.attr('src') === './assets/dislike.png') {
-                    element.attr('src', './assets/dislikered.png');
-                } else {
-                    element.attr('src', './assets/dislike.png');
-                    upvoteIcon.attr('src', './assets/like.png');
-                }
-            }
-        }
-
-
-
-
 
 
 
