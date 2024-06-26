@@ -1,4 +1,11 @@
 <?php
+session_start();
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
+else {$isLoggedIn = false;}
+?>
+
+<?php
 include "../php/conexionAndClose.php";
 $conn = connect();
 
@@ -43,16 +50,24 @@ if (isset($_GET['movieId'])) {
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="./adminList.php">List Movies</a>
-                            <a class="dropdown-item" href="./adminModifyAdd.html">Add Movies</a>
+                            <a class="dropdown-item" href="./adminModifyAdd.php">Add Movies</a>
                             <a class="dropdown-item" href="./adminListVote.php">List Vote</a>
                         </div>
                     </div>
                     <ul class="navbar-nav me-auto">
+                    <?php if ($isLoggedIn): ?>
+                    <li class="nav-item text-center">
+                        <div class="btn bg-main m-2" type="button">
+                            <a href="./php/logout.php" class="m-0 text-third">Logout</a>
+                        </div>     
+                    </li>       
+                    <?php else: ?>
                         <li class="nav-item text-center">
-                            <a class="nav-link" href="./login.php">
-                                <img src="../assets/loginicon.png" width="32" height="32">
+                            <a class="nav-link" href="./pages/login.php">
+                                <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
                             </a>
                         </li>
+                    <?php endif; ?>
                     </ul>
                 </div>
             </div>

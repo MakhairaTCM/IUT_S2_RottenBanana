@@ -1,3 +1,9 @@
+<?php
+session_start();
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
+else {$isLoggedIn = false;}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,18 +44,26 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
-                          <a class="dropdown-item" href="./pages/adminModifyAdd.html">Add Movies</a>
+                          <a class="dropdown-item" href="./pages/adminModifyAdd.php">Add Movies</a>
                           <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
                         </div>
                     </div>
                 </div>
-                
+
                 <ul class="navbar-nav me-auto">
-                  <li class="nav-item text-center">
-                    <a class="nav-link" href="./pages/login.php">
-                        <img src="./assets/loginicon.png" width="32" height="32" alt="icon login">
-                    </a>
-                  </li>
+                <?php if ($isLoggedIn): ?>
+                    <li class="nav-item text-center">
+                        <div class="btn bg-main m-2" type="button">
+                            <a href="./php/logout.php" class="m-0 text-third">Logout</a>
+                        </div>     
+                    </li>       
+                <?php else: ?>
+                    <li class="nav-item text-center">
+                        <a class="nav-link" href="./pages/login.php">
+                            <img src="./assets/loginicon.png" width="32" height="32" alt="icon login">
+                        </a>
+                    </li>
+                <?php endif; ?>
                 </ul>
               </div>
             </div>

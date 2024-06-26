@@ -1,4 +1,11 @@
 <?php
+session_start();
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
+else {$isLoggedIn = false;}
+?>
+
+<?php
 $showLoginError = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -22,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $check = password_verify("$password", "$hash");
 
     if ($check) {
+      $_SESSION['user_id'] = $email;
       header("Location: ../index.php");
     }
 
@@ -56,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <nav class="navbar navbar-expand-sm navbar-dark bg-third">
             <div class="container-fluid ">
               <a class="navbar-brand" href="../index.php"><img src="../assets/banana.png" alt="" width="28"></a>
-              <a href="../index.html" class="mt-auto mb-auto text-decoration-none mr-3">
+              <a href="../index.php" class="mt-auto mb-auto text-decoration-none mr-3">
                 <h1 class="m-0">Rotten Banana</h1>
               </a>
 
@@ -65,11 +73,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </button>
               <div class="collapse navbar-collapse justify-content-end align-items-center" id="mynavbar">
               
-                <ul class="navbar-nav me-auto">
+              <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
-                    <a class="nav-link" href="./login.php">
-                        <img src="../assets/loginicon.png" width="32" height="32">
-                    </a>
+                      <a class="nav-link" href="./pages/login.php">
+                          <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
+                      </a>
                   </li>
                 </ul>
               </div>
@@ -79,26 +87,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php 
     if($showLoginError) {
-
         echo ' <div class="container-fluid row justify-content-center"><div class="alert alert-danger col-3 mt-4 text-center">Email or Password is wrong</div></div> ';
       }
     ?>
 
     <div class="container col-md-5 mt-4">
-        <div class="col-md-12 mb-4">
-            <h2 class="text-center">Log In</h2>
-            <form id="loginForm" action="login.php" method="post">
-                <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" class="form-control" id="loginEmail" name="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" class="form-control" id="loginPassword" name="loginPassword" required>
-                </div>
-                <button type="submit" class="btn bg-third text-second btn-block">Log In</button>
-            </form>
-        </div>
+      <div class="col-md-12 mb-4">
+        <h2 class="text-center">Log In</h2>
+    <?php if ($isLoggedIn): ?>
+        <div class="justify-content-center text-center pt-4">
+          <p class="m-0">
+            You're already logged in, log out first 
+          </p>
+          <div class="btn bg-main m-2" type="button">
+              <a href="../php/logoutLogin.php" class="m-0 text-third">Logout</a>
+          </div>   
+        </div>  
+    <?php else: ?>
+        <form id="loginForm" action="login.php" method="post">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" class="form-control" id="loginEmail" name="loginEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" class="form-control" id="loginPassword" name="loginPassword" required>
+          </div>
+          <button type="submit" class="btn bg-third text-second btn-block">Log In</button>
+        </form>
+    <?php endif; ?>
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

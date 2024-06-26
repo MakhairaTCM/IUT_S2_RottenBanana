@@ -1,4 +1,11 @@
 <?php
+session_start();
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
+else {$isLoggedIn = false;}
+?>
+
+<?php
 $showAlert = false;  
 $showError = false;  
 $exists=false; 
@@ -73,12 +80,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
               </button>
               <div class="collapse navbar-collapse justify-content-end align-items-center" id="mynavbar">
               
-                <ul class="navbar-nav me-auto">
-                  <li class="nav-item text-center">
-                    <a class="nav-link" href="./login.php">
-                        <img src="../assets/loginicon.png" width="32" height="32">
-                    </a>
-                  </li>
+              <ul class="navbar-nav me-auto">
+              <?php if ($isLoggedIn): ?>
+                    <li class="nav-item text-center">
+                        <div class="btn bg-main m-2" type="button">
+                            <a href="./php/logout.php" class="m-0 text-third">Logout</a>
+                        </div>     
+                    </li>       
+                <?php else: ?>
+                    <li class="nav-item text-center">
+                        <a class="nav-link" href="./pages/login.php">
+                            <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
+                        </a>
+                    </li>
+                <?php endif; ?>
                 </ul>
               </div>
             </div>
