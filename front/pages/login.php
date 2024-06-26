@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               
               <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
-                      <a class="nav-link" href="./pages/login.php">
+                      <a class="nav-link" href="./pages/choose.php">
                           <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
                       </a>
                   </li>
