@@ -312,26 +312,31 @@ else {$isLoggedIn = false;}
         }
 
         function addVoteListeners() {
+            const isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
+            
             $(document).off('click', '.vote-icon').on('click', '.vote-icon', function() {
-                const movieCard = $(this).closest('.movie-poster-card');
-                const movieId = movieCard.data('movie-id'); // ID du film
-                const movieTitle = movieCard.data('movie-title'); // Titre du film
-                const movieGenre = movieCard.data('movie-genre'); // Genre du film
-                const movieImgSrc = movieCard.find('img.movieImg').attr('src'); // URL du poster
-                const movieSummary = movieCard.data('movie-summary');
+                
+                if (!isLoggedIn) {
+                    window.location.href = './pages/choose.php';
+                    return;
+                }
 
-                const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1; // +1 for upvote, -1 for downvote
-                const userEmail = 'user1@example.com'; // Replace this with actual user email
+                const movieCard = $(this).closest('.movie-poster-card');
+                const movieId = movieCard.data('movie-id');
+                const movieTitle = movieCard.data('movie-title');
+                const movieGenre = movieCard.data('movie-genre');
+                const movieImgSrc = movieCard.find('img.movieImg').attr('src');
+                const movieSummary = movieCard.data('movie-summary');
+                const voteValue = $(this).attr('alt') === 'Upvote' ? 1 : -1;
 
                 const movieData = {
                     movieId: movieId,
                     movieTitle: movieTitle,
                     movieGenre: movieGenre,
                     movieImgSrc: movieImgSrc,
-                    valide: 1, // because u don't need to validate a movie already present in the api 
+                    valide: 1,
                     movieSummary: movieSummary,
-                    vote: voteValue, // +1 for upvote, -1 for downvote
-                    mail: userEmail
+                    vote: voteValue
                 };
 
                 $.ajax({
@@ -339,8 +344,11 @@ else {$isLoggedIn = false;}
                     type: 'POST',
                     data: movieData,
                     success: function(response) {
-                        console.log("vote sent");
-                        updateVoteIcon(movieCard, voteValue);
+                        if (response.success) {
+                            updateVoteIcon(movieCard, voteValue);
+                        } else {
+                            console.error('Error casting vote:', response.error);
+                        }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error('Error:', textStatus, errorThrown);
@@ -348,6 +356,7 @@ else {$isLoggedIn = false;}
                 });
             });
         }
+
 
         function updateVoteIcon(movieCard, voteValue) {
             const upvoteIcon = movieCard.find('.vote-icon[alt="Upvote"]');
@@ -381,7 +390,7 @@ else {$isLoggedIn = false;}
                     downvoteIcon.attr('src', './assets/dislikered_empty.png').removeClass('disappear dislike');
                 }, 300); 
             }
-}
+        }
 
 
 
