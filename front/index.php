@@ -336,24 +336,40 @@
         }
 
         function updateVoteIcon(movieCard, voteValue) {
+            const upvoteIcon = movieCard.find('.vote-icon[alt="Upvote"]');
+            const downvoteIcon = movieCard.find('.vote-icon[alt="Downvote"]');
+            
             if (voteValue === 1) {
-                const upvoteIcon = movieCard.find('.vote-icon[alt="Upvote"]');
                 if (upvoteIcon.attr('src') === './assets/likeblue.png') {
-                    upvoteIcon.attr('src', './assets/likeblue_empty.png'); 
+                    upvoteIcon.addClass('disappear');
+                    setTimeout(() => {
+                        upvoteIcon.attr('src', './assets/likeblue_empty.png').removeClass('disappear like');
+                    }, 300); 
                 } else {
-                    upvoteIcon.attr('src', './assets/likeblue.png');
-                    movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered_empty.png'); 
+                    upvoteIcon.attr('src', './assets/likeblue.png').addClass('like');
+                    downvoteIcon.attr('src', './assets/dislikered_empty.png').removeClass('dislike');
                 }
             } else if (voteValue === -1) {
-                const downvoteIcon = movieCard.find('.vote-icon[alt="Downvote"]');
                 if (downvoteIcon.attr('src') === './assets/dislikered.png') {
-                    downvoteIcon.attr('src', './assets/dislikered_empty.png'); 
+                    downvoteIcon.addClass('disappear');
+                    setTimeout(() => {
+                        downvoteIcon.attr('src', './assets/dislikered_empty.png').removeClass('disappear dislike');
+                    }, 300); 
                 } else {
-                    downvoteIcon.attr('src', './assets/dislikered.png');
-                    movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue_empty.png'); 
+                    downvoteIcon.attr('src', './assets/dislikered.png').addClass('dislike');
+                    upvoteIcon.attr('src', './assets/likeblue_empty.png').removeClass('like');
                 }
+            } else {
+                upvoteIcon.addClass('disappear');
+                downvoteIcon.addClass('disappear');
+                setTimeout(() => {
+                    upvoteIcon.attr('src', './assets/likeblue_empty.png').removeClass('disappear like');
+                    downvoteIcon.attr('src', './assets/dislikered_empty.png').removeClass('disappear dislike');
+                }, 300); 
             }
-        }
+}
+
+
 
 
 
