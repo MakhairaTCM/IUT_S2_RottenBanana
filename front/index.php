@@ -88,8 +88,8 @@
                                 <img src="<?= $film['url_poster'];?>" alt="poster of the film <?= $film['titre'];?>" class="movieImg">
                                 <p><?= $film['titre'];?></p>
                                 <div class="vote-icons">
-                                    <img src="./assets/like.png" class="vote-icon" alt="Upvote">
-                                    <img src="./assets/dislike.png" class="vote-icon" alt="Downvote">
+                                    <img src="./assets/likeblue_empty.png" class="vote-icon" alt="Upvote">
+                                    <img src="./assets/dislikered_empty.png" class="vote-icon" alt="Downvote">
                                 </div>
                                 <div class="resume">
                                     <p>Summary :</p>
@@ -268,8 +268,8 @@
                         const posterImg = $('<img>').attr('src', posterUrl).attr('alt', `${movieDetails.title} Poster`).addClass('movieImg');
                         const movieTitle = $('<p>').text(movieDetails.title);
                         const voteIcons = $('<div>').addClass('vote-icons')
-                            .append($('<img>').attr('src', './assets/like.png').addClass('vote-icon').attr('alt', 'Upvote'))
-                            .append($('<img>').attr('src', './assets/dislike.png').addClass('vote-icon').attr('alt', 'Downvote'));
+                            .append($('<img>').attr('src', './assets/likeblue_empty.png').addClass('vote-icon').attr('alt', 'Upvote'))
+                            .append($('<img>').attr('src', './assets/dislikered_empty.png').addClass('vote-icon').attr('alt', 'Downvote'));
                         
                         const summary = $('<div>').addClass('resume')
                             .append($('<p>').text("Summary:"))
@@ -337,13 +337,24 @@
 
         function updateVoteIcon(movieCard, voteValue) {
             if (voteValue === 1) {
-                movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue.png');
-                movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislike.png'); // reset the downvote icon
+                const upvoteIcon = movieCard.find('.vote-icon[alt="Upvote"]');
+                if (upvoteIcon.attr('src') === './assets/likeblue.png') {
+                    upvoteIcon.attr('src', './assets/likeblue_empty.png'); 
+                } else {
+                    upvoteIcon.attr('src', './assets/likeblue.png');
+                    movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered_empty.png'); 
+                }
             } else if (voteValue === -1) {
-                movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/like.png'); // reset the upvote icon
-                movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered.png');
+                const downvoteIcon = movieCard.find('.vote-icon[alt="Downvote"]');
+                if (downvoteIcon.attr('src') === './assets/dislikered.png') {
+                    downvoteIcon.attr('src', './assets/dislikered_empty.png'); 
+                } else {
+                    downvoteIcon.attr('src', './assets/dislikered.png');
+                    movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue_empty.png'); 
+                }
             }
         }
+
 
 
     </script>
