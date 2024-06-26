@@ -49,7 +49,7 @@ if (isset($_GET['movieId'])) {
                     </div>
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item text-center">
-                            <a class="nav-link" href="./login.html">
+                            <a class="nav-link" href="./login.php">
                                 <img src="../assets/loginicon.png" width="32" height="32">
                             </a>
                         </li>
