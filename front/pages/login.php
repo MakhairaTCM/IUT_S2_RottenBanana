@@ -19,8 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $num = mysqli_num_rows($result);  
 
   if ($num > 0) {
-
-    $sql = "SELECT PASSWORD FROM user WHERE mail='".$email."';";
+    $sql = "SELECT PASSWORD,ADMIN FROM user WHERE mail='".$email."';";
     $result = mysqli_query($conn, $sql); 
     $row = mysqli_fetch_array($result);
 
@@ -30,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($check) {
       $_SESSION['user_id'] = $email;
+      if ($row[1] == "1") {$_SESSION['admin'] = true;}
       header("Location: ../index.php");
     }
 
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               
               <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
-                      <a class="nav-link" href="./pages/choose.php">
+                      <a class="nav-link" href="./choose.php">
                           <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
                       </a>
                   </li>
@@ -94,6 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container col-md-5 mt-4">
       <div class="col-md-12 mb-4">
         <h2 class="text-center">Log In</h2>
+
+
     <?php if ($isLoggedIn): ?>
         <div class="justify-content-center text-center pt-4">
           <p class="m-0">
@@ -103,6 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <a href="../php/logoutLogin.php" class="m-0 text-third">Logout</a>
           </div>   
         </div>  
+
+
     <?php else: ?>
         <form id="loginForm" action="login.php" method="post">
           <div class="form-group">
@@ -116,6 +120,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <button type="submit" class="btn bg-third text-second btn-block">Log In</button>
         </form>
     <?php endif; ?>
+
+
       </div>
     </div>
 
