@@ -1,8 +1,18 @@
 <?php
 session_start();
 // Check if the user is logged in
-if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
+if (isset($_SESSION['user_id'])) {
+    $isLoggedIn = true;
+    $email = $_SESSION['user_id'];
+} 
 else {$isLoggedIn = false;}
+if (isset($_SESSION['admin'])) {
+    if ($_SESSION['admin'] == true) {
+        $isAdmin = true;
+    }
+    else {$isAdmin = false;}
+}
+else {$isAdmin = false;}
 ?>
 
 <!DOCTYPE html>
@@ -35,19 +45,26 @@ else {$isLoggedIn = false;}
                 <span class="navbar-toggler-icon"></span>
               </button>
               
-              <div class="collapse navbar-collapse justify-content-between align-items-center" id="mynavbar">
+            <div class="collapse navbar-collapse justify-content-between align-items-center" id="mynavbar">
                 <div class="d-flex ">
                     <input type="text" class="form-control mt-auto mb-auto" placeholder="Search" id="input-movie">
-                    <div class="dropdown ml-3">
-                        <button class="btn text-third  dropdown-toggle bg-main " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                    <?php if ($isLoggedIn && $isAdmin): ?>
+                        <div class="dropdown ml-3">
+                            <button class="btn text-third dropdown-toggle bg-main " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
-                          <a class="dropdown-item" href="./pages/adminModifyAdd.php">Add Movies</a>
-                          <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
+                                <a class="dropdown-item" href="./pages/adminModifyAdd.php">Add Movies</a>
+                                <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
+                            </div>
                         </div>
-                    </div>
+                    <?php elseif ($isLoggedIn): ?>
+                        <div class="btn bg-main m-2" type="button">
+                            <a href="./pages/adminModifyAdd.php" class="m-0 text-third text-nowrap">Add Movies</a>
+                        </div>    
+                    <?php endif;?>
                 </div>
 
                 <ul class="navbar-nav me-auto">
@@ -63,7 +80,7 @@ else {$isLoggedIn = false;}
                             <img src="./assets/loginicon.png" width="32" height="32" alt="icon login">
                         </a>
                     </li>
-                <?php endif; ?>
+                <?php endif;?>
                 </ul>
               </div>
             </div>

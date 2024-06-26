@@ -1,7 +1,9 @@
 <?php
 session_start();
 // Check if the user is logged in
-if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
+if (isset($_SESSION['user_id'])) {
+    $isLoggedIn = true; 
+    $email = $_SESSION['user_id'];} 
 else {$isLoggedIn = false;}
 ?>
 
@@ -56,7 +58,7 @@ else {$isLoggedIn = false;}
                     </li>       
                 <?php else: ?>
                     <li class="nav-item text-center">
-                        <a class="nav-link" href="./pages/choose.php">
+                        <a class="nav-link" href="./choose.php">
                             <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
                         </a>
                     </li>

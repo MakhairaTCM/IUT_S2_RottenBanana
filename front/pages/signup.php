@@ -89,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     </li>       
                 <?php else: ?>
                     <li class="nav-item text-center">
-                        <a class="nav-link" href="./pages/choose.php">
+                        <a class="nav-link" href="./choose.php">
                             <img src="../assets/loginicon.png" width="32" height="32" alt="icon login">
                         </a>
                     </li>
