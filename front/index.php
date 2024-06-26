@@ -339,18 +339,18 @@
             if (voteValue === 1) {
                 const upvoteIcon = movieCard.find('.vote-icon[alt="Upvote"]');
                 if (upvoteIcon.attr('src') === './assets/likeblue.png') {
-                    upvoteIcon.attr('src', './assets/likeblue_empty.png'); // Toggle off if already blue
+                    upvoteIcon.attr('src', './assets/likeblue_empty.png'); 
                 } else {
                     upvoteIcon.attr('src', './assets/likeblue.png');
-                    movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered_empty.png'); // reset the downvote icon
+                    movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered_empty.png'); 
                 }
             } else if (voteValue === -1) {
                 const downvoteIcon = movieCard.find('.vote-icon[alt="Downvote"]');
                 if (downvoteIcon.attr('src') === './assets/dislikered.png') {
-                    downvoteIcon.attr('src', './assets/dislikered_empty.png'); // Toggle off if already red
+                    downvoteIcon.attr('src', './assets/dislikered_empty.png'); 
                 } else {
                     downvoteIcon.attr('src', './assets/dislikered.png');
-                    movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue_empty.png'); // reset the upvote icon
+                    movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue_empty.png'); 
                 }
             }
         }
