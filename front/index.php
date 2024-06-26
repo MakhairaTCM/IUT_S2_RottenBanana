@@ -46,7 +46,7 @@
                 
                 <ul class="navbar-nav me-auto">
                   <li class="nav-item text-center">
-                    <a class="nav-link" href="./pages/login.html">
+                    <a class="nav-link" href="./pages/login.php">
                         <img src="./assets/loginicon.png" width="32" height="32" alt="icon login">
                     </a>
                   </li>
