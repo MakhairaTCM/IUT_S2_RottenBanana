@@ -1,5 +1,7 @@
 <?php
 include "./php/conexionAndClose.php";
+session_start();
+// Check if the user is logged in
 
 $conn = connect();
 
@@ -12,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $movieSummary = $_POST['movieSummary'];
 
     $vote = $_POST['vote']; // +1 for upvote, -1 for downvote
-    $mail = $_POST['mail']; // Email of the user
+    $mail = $_SESSION['user_id']; // Email of the user
 
     // Check if movieId exists in Film table
     $stmt_check = $conn->prepare("SELECT id_film FROM Film WHERE id_film = ?");

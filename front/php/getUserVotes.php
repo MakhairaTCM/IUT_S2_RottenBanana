@@ -1,7 +1,9 @@
 <?php
+session_start();
+
 include "conexionAndClose.php";
 $conn = connect();
-$userEmail = 'user1@example.com'; // Replace with actual user email or session variable
+$userEmail = $_SESSION['user_id']; 
 
 $sql = "SELECT id_film, vote FROM vote WHERE mail = ?";
 $stmt = $conn->prepare($sql);
