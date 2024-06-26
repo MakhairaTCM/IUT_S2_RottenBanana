@@ -337,13 +337,24 @@
 
         function updateVoteIcon(movieCard, voteValue) {
             if (voteValue === 1) {
-                movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue.png');
-                movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered_empty.png'); // reset the downvote icon
+                const upvoteIcon = movieCard.find('.vote-icon[alt="Upvote"]');
+                if (upvoteIcon.attr('src') === './assets/likeblue.png') {
+                    upvoteIcon.attr('src', './assets/likeblue_empty.png'); // Toggle off if already blue
+                } else {
+                    upvoteIcon.attr('src', './assets/likeblue.png');
+                    movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered_empty.png'); // reset the downvote icon
+                }
             } else if (voteValue === -1) {
-                movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue_empty.png'); // reset the upvote icon
-                movieCard.find('.vote-icon[alt="Downvote"]').attr('src', './assets/dislikered.png');
+                const downvoteIcon = movieCard.find('.vote-icon[alt="Downvote"]');
+                if (downvoteIcon.attr('src') === './assets/dislikered.png') {
+                    downvoteIcon.attr('src', './assets/dislikered_empty.png'); // Toggle off if already red
+                } else {
+                    downvoteIcon.attr('src', './assets/dislikered.png');
+                    movieCard.find('.vote-icon[alt="Upvote"]').attr('src', './assets/likeblue_empty.png'); // reset the upvote icon
+                }
             }
         }
+
 
 
     </script>
