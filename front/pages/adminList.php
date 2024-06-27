@@ -1,11 +1,4 @@
-<?php
-session_start();
-// Check if the user is logged in
-if (isset($_SESSION['user_id'])) {
-    $isLoggedIn = true; 
-    $email = $_SESSION['user_id'];} 
-else {$isLoggedIn = false;}
-?>
+<?php include '../php/sessionManage.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">

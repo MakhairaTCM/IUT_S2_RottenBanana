@@ -5,47 +5,54 @@ $showAlert = false;
 $showError = false;  
 $exists=false; 
     
-if($_SERVER["REQUEST_METHOD"] == "POST") { 
-      
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include("../php/connectAndClose.php");
-    
-    $email = $_POST["signupEmail"];  
-    $password = $_POST["signupPassword"];  
+  
+    $email = filter_var($_POST["signupEmail"], FILTER_SANITIZE_EMAIL);
+    $password = $_POST["signupPassword"];
     $cpassword = $_POST["signupPasswordConfirm"];
-    $sql = "Select * from user where mail='$email'"; 
-    
-      $result = mysqli_query($conn, $sql); 
-    
-    $num = mysqli_num_rows($result);  
-    
-    // This sql query is use to check if 
-    // the email is already present  
-    // or not in our Database 
-    if($num == 0) { 
-        if(($password == $cpassword) && $exists==false) { 
-    
-            $hash = password_hash($password, PASSWORD_DEFAULT); 
-                
-            // Password Hashing is used here.  
-            $sql = "INSERT INTO `user` ( `mail`, `password`, `admin`) VALUES ('$email', '$hash', '0')"; 
-    
-            $result = mysqli_query($conn, $sql); 
-    
-            if ($result) { 
-                $showAlert = true;  
-            } 
-        }  
-        else {  
-            $showError = "Passwords do not match";  
-        }       
-    }// end if  
-    
-   if($num>0)  
-   { 
-      $exists="email not available";  
-   }  
-    
-}//end if    
+  
+    // On vérifie si l'email existe déjà
+    $sql = "SELECT * FROM user WHERE mail = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+  
+    if (!$stmt) {
+      echo "MySQL Error: " . mysqli_error($conn);
+      exit();
+    }
+  
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+  
+    if (mysqli_num_rows($result) > 0) {
+      $exists = "Email already exists";
+    } else {
+      mysqli_free_result($result);
+
+      if ($password == $cpassword) {
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+  
+        $sql = "INSERT INTO `user` (`mail`, `password`, `admin`) VALUES (?, ?, '0')";
+        $stmt = mysqli_prepare($conn, $sql);
+  
+        if (!$stmt) {
+          echo "MySQL Error: " . mysqli_error($conn);
+          exit();
+        }
+  
+        mysqli_stmt_bind_param($stmt, "ss", $email, $hash);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        $showAlert = true;
+      } else {
+        $showError = true;
+      }
+    }
+  }
+
 ?> 
 <html lang="fr">
 <head>

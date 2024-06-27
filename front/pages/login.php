@@ -1,9 +1,4 @@
-<?php
-session_start();
-// Check if the user is logged in
-if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
-else {$isLoggedIn = false;}
-?>
+<?php include '../php/sessionManage.php'; ?>
 
 <?php
 $showLoginError = false;
@@ -11,37 +6,45 @@ $showLoginError = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   include("../php/connectAndClose.php");
 
-  $email = $_POST["loginEmail"];
-  $password = $_POST["loginPassword"];
+  $email = filter_var($_POST["loginEmail"], FILTER_SANITIZE_EMAIL);
+  $password = filter_var($_POST["loginPassword"], FILTER_SANITIZE_STRING);
 
-  $sql = "SELECT * FROM user WHERE mail='".$email."';";
-  $result = mysqli_query($conn, $sql); 
-  $num = mysqli_num_rows($result);  
+  $sql = "SELECT PASSWORD, ADMIN FROM user WHERE mail = ?";
 
-  if ($num > 0) {
-    $sql = "SELECT PASSWORD,ADMIN FROM user WHERE mail='".$email."';";
-    $result = mysqli_query($conn, $sql); 
-    $row = mysqli_fetch_array($result);
+  $stmt = mysqli_prepare($conn, $sql);
 
-    $hash = "0";
-    if ($row) {$hash = $row[0];}
-    $check = password_verify("$password", "$hash");
+  if (!$stmt) {
+    echo "MySQL Error: " . mysqli_error($conn);
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "s", $email);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+  mysqli_stmt_close($stmt);
+
+  if ($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+
+    $hash = $row['PASSWORD'];
+    $check = password_verify($password, $hash);
 
     if ($check) {
       $_SESSION['user_id'] = $email;
-      if ($row[1] == "1") {$_SESSION['admin'] = true;}
+      if ($row['ADMIN'] == "1") {
+        $_SESSION['admin'] = true;
+      }
       header("Location: ../index.php");
-    }
-
-    else {
+    } else {
       echo "<script>console.log('Email or password wrong');</script>";
       $showLoginError = true;
     }
-  }
-  else {
+  } else {
     echo "<script>console.log('Email or password wrong');</script>";
     $showLoginError = true;
   }
+
+  mysqli_free_result($result);
 }
 ?>
 
