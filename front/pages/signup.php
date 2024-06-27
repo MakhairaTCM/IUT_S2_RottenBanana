@@ -1,9 +1,4 @@
-<?php
-session_start();
-// Check if the user is logged in
-if (isset($_SESSION['user_id'])) {$isLoggedIn = true;} 
-else {$isLoggedIn = false;}
-?>
+<?php include '../php/sessionManage.php'; ?>
 
 <?php
 $showAlert = false;  
@@ -84,7 +79,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
               <?php if ($isLoggedIn): ?>
                     <li class="nav-item text-center">
                         <div class="btn bg-main m-2" type="button">
-                            <a href="./php/logout.php" class="m-0 text-third">Logout</a>
+                            <a href="../php/logout.php" class="m-0 text-third">Logout</a>
                         </div>     
                     </li>       
                 <?php else: ?>

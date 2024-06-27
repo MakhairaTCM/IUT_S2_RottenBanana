@@ -53,7 +53,7 @@ else {$isLoggedIn = false;}
                 <?php if ($isLoggedIn): ?>
                     <li class="nav-item text-center">
                         <div class="btn bg-main m-2" type="button">
-                            <a href="./php/logout.php" class="m-0 text-third">Logout</a>
+                            <a href="../php/logout.php" class="m-0 text-third">Logout</a>
                         </div>     
                     </li>       
                 <?php else: ?>

@@ -1,19 +1,4 @@
-<?php
-session_start();
-// Check if the user is logged in
-if (isset($_SESSION['user_id'])) {
-    $isLoggedIn = true;
-    $email = $_SESSION['user_id'];
-} 
-else {$isLoggedIn = false;}
-if (isset($_SESSION['admin'])) {
-    if ($_SESSION['admin'] == true) {
-        $isAdmin = true;
-    }
-    else {$isAdmin = false;}
-}
-else {$isAdmin = false;}
-?>
+<?php include './php/sessionManage.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,10 +45,6 @@ else {$isAdmin = false;}
                                 <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
                             </div>
                         </div>
-                    <?php elseif ($isLoggedIn): ?>
-                        <div class="btn bg-main m-2" type="button">
-                            <a href="./pages/adminModifyAdd.php" class="m-0 text-third text-nowrap">Add Movies</a>
-                        </div>    
                     <?php endif;?>
                 </div>
 
