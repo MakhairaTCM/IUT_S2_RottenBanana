@@ -84,7 +84,7 @@
         <section class="mb-5">
             <div class="row ml-0">
                 <h2>Community</h2>
-                <a href="./pages/adminModifyAdd.html" class="btn btnRedBody ml-3 mt-auto mb-auto">
+                <a href="./pages/adminModifyAdd.php" class="btn btnRedBody ml-3 mt-auto mb-auto">
                     <i class="fas fa-plus"></i> Add Suggestion
                 </a>
             </div>
