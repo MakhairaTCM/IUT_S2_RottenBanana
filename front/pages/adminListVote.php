@@ -1,6 +1,6 @@
 <?php include '../php/sessionManage.php'; ?>
 <?php 
-if(!$isLoggedIn){
+if(!$isLoggedIn || !$isAdmin){
     header("location: ./choose.php");
 }
 ?>

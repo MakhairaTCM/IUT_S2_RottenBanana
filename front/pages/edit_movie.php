@@ -1,10 +1,9 @@
 <?php include '../php/sessionManage.php'; ?>
 <?php 
-if(!$isLoggedIn){
+if(!$isLoggedIn || !$isAdmin){
     header("location: ./choose.php");
 }
 ?>
-
 <?php
 include "../php/conexionAndClose.php";
 $conn = connect();

@@ -1,6 +1,6 @@
 <?php
 function connect(){
-    $conn = new mysqli("localhost", "root", "", "your_database");
+    $conn = new mysqli("localhost", "root", "", "databasegroupe5");
 
     // Vérifie la connexion
     if ($conn->connect_error) {

@@ -23,16 +23,20 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between align-items-center" id="mynavbar">
-                    <div class="dropdown">
-                        <button class="btn text-third dropdown-toggle bg-main" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    
+                    <?php if ($isLoggedIn && $isAdmin): ?>
+                        <div class="dropdown ml-3">
+                            <button class="btn text-third dropdown-toggle bg-main " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="./adminList.php">List Movies</a>
-                            <a class="dropdown-item" href="./adminModifyAdd.php">Add Movies</a>
-                            <a class="dropdown-item" href="./adminListVote.php">List Vote</a>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="./pages/adminList.php">List Movies</a>
+                                <a class="dropdown-item" href="./pages/adminModifyAdd.php">Add Movies</a>
+                                <a class="dropdown-item" href="./pages/adminListVote.php">List Vote</a>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif;?>
+                   
                     <ul class="navbar-nav me-auto">
                     <?php if ($isLoggedIn): ?>
                     <li class="nav-item text-center">

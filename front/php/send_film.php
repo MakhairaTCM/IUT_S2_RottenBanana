@@ -1,5 +1,5 @@
 <?php
-include "./php/conexionAndClose.php";
+include "./conexionAndClose.php";
 session_start();
 // Check if the user is logged in
 
