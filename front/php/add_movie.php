@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
             // Redirect to the add movie page after insertion
-            header("location: ../pages/adminModifyAdd.html");
+            header("location: ../pages/adminModifyAdd.php");
         } else {
             echo "Error: " . $stmt->error;
         }

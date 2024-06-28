@@ -1,4 +1,10 @@
 <?php include '../php/sessionManage.php'; ?>
+<?php 
+if(!$isLoggedIn){
+    header("location: ./choose.php");
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -178,8 +184,8 @@
                                         <h5 class="card-title"><?= $film['titre'];?></h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btnRedBody mr-2 mt-auto mb-auto">
-                                                    <a href="edit_movie.php?movieId=<?= $film['id_film']; ?>" class="text-white">Edit</a>
+                                                <button type="button" class="btn btnRedBody mr-2 mt-auto mb-auto rounded-pill">
+                                                    <a href="edit_movie.php?movieId=<?= $film['id_film']; ?>" class="text-main" >Edit</a>
                                                 </button>
 
                                                 <form method="POST" action="">

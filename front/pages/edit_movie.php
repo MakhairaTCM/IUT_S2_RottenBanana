@@ -1,4 +1,9 @@
 <?php include '../php/sessionManage.php'; ?>
+<?php 
+if(!$isLoggedIn){
+    header("location: ./choose.php");
+}
+?>
 
 <?php
 include "../php/conexionAndClose.php";
@@ -100,9 +105,14 @@ if (isset($_GET['movieId'])) {
                         <option value="Romance" <?= $film['genre'] == 'Romance' ? 'selected' : ''; ?>>Romance</option>
                         <option value="Sci-Fi" <?= $film['genre'] == 'Sci-Fi' ? 'selected' : ''; ?>>Sci-Fi</option>
                         <option value="Thriller" <?= $film['genre'] == 'Thriller' ? 'selected' : ''; ?>>Thriller</option>
+                        <option value="Animation" <?= $film['genre'] == 'Animation' ? 'selected' : ''; ?>>Animation</option>
+                        <option value="War" <?= $film['genre'] == 'War' ? 'selected' : ''; ?>>War</option>
+
+
+                     
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Update Movie</button>
+                <button type="submit" class="btn btnRedBody">Update Movie</button>
             </form>
         </section>
     </main>

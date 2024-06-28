@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt_check_vote->close();
 
-    header("Location: index.php"); // Redirect to index.php after processing
+    header("Location: ../index.php"); // Redirect to index.php after processing
     exit();
 } else {
     echo "Invalid request method";

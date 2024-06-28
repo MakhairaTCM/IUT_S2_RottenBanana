@@ -1,4 +1,9 @@
 <?php include '../php/sessionManage.php'; ?>
+<?php 
+if(!$isLoggedIn){
+    header("location: ./choose.php");
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">

@@ -27,8 +27,11 @@ html, body {
 .bg-third {
     background-color: #D94174;
 }
+.text-main{
+    color: #181330 !important;
+}
 .text-second {
-    color: #F3EDED;
+    color: #F3EDED !important;
 }
 .text-third{
     color: #D94174 !important;
@@ -47,6 +50,9 @@ h1{
 }
 h5{
     font-size: 0.9rem !important;
+    height: 30px !important;
+    overflow: hidden !important;
+    
 }
 td{
     color: #181330 !important;
@@ -271,7 +277,7 @@ td{
 }
 .fixedHeightWidthCard{
     width: 220px;
-    height: 380px;
+    /* height: 380px; */
     margin-right: 20px;
     margin-bottom: 30px;
     

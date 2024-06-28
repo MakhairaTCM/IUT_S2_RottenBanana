@@ -1,5 +1,6 @@
 <?php include './php/sessionManage.php'; ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -161,9 +162,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', e => {
             fetchRandomMovies();
-            fetchUserVotes(); // Fetch user votes on page load
+            fetchUserVotes(); 
 
-            $('#search-results-section').hide(); // Initially hide the search results section
+            $('#search-results-section').hide();
 
             $('#input-movie').on('input', function () {
                 const query = $(this).val();
@@ -186,7 +187,7 @@
                 dataType: 'json',
                 success: function(response) {
                     userVotes = response;
-                    updateVoteIcons(); // Update vote icons once user votes are fetched
+                    updateVoteIcons(); 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching user votes:', textStatus, errorThrown);
@@ -242,11 +243,11 @@
                         summary: movie.overview
                     }));
                     displayMovies(movies, '#movie-posters');
-                    $('#search-results-section').show(); // Show search results section
+                    $('#search-results-section').show(); 
                 },
                 error: function() {
                     $('#movie-posters').html(`<p>Sorry, no movies found.</p>`);
-                    $('#search-results-section').hide(); // Hide search results section on error
+                    $('#search-results-section').hide(); 
                 }
             });
         }
@@ -289,8 +290,8 @@
 
                         moviePosterCard.append(posterImg, movieTitle, voteIcons, summary);
                         moviePostersContainer.append(moviePosterCard);
-                        updateVoteIcons(); // Update vote icons for the newly added movie cards
-                        addVoteListeners(); // Add listeners after each movie card is appended
+                        updateVoteIcons(); 
+                        addVoteListeners(); 
                     },
                     error: function() {
                         const moviePosterCard = $('<div>').addClass('movie-poster-card');
@@ -333,14 +334,14 @@
                     movieTitle: movieTitle,
                     movieGenre: movieGenre,
                     movieImgSrc: movieImgSrc,
-                    valide: 1, // because u don't need to validate a movie already present in the api 
+                    valide: 1, 
                     movieSummary: movieSummary,
-                    vote: voteValue // +1 for upvote, -1 for downvote
+                    vote: voteValue 
                     // mail: userEmail
                 };
 
                 $.ajax({
-                    url: 'film.php',
+                    url: './php/send_film.php',
                     type: 'POST',
                     data: movieData,
                     success: function(response) {
